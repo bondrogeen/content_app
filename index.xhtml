@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link type="text/css" href="css/overcast/jquery-ui.css" rel="Stylesheet" />
+<link rel="stylesheet" href="css/default.css">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/font-awesome.css" rel="stylesheet">
+
+
+<bsh>
+// Set PAW Version
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.app.Service;
+
+service = (Service) server.props.get("serviceContext");
+preferences = service.getSharedPreferences("PawServer", 0);
+pawVersion = preferences.getString("Version", "na");
+
+// Put version into server scope
+serverPut("pawVersion", pawVersion);
+
+print("<script type='text/javascript'> function setPawVersion() { $('#pawVersion').html('" + pawVersion + "'); }</script>");
+</bsh>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+
+<script type="text/javascript">
+	var menuHidden = false;
+	$(document).ready(function() {
+		resizeIframe();
+		setPawVersion();
+		$("#accordion").accordion();
+		updateStatusbar();
+	});
+
+	$(window).bind('resize', function() {
+		resizeIframe();
+	});
+
+	function resizeIframe() {
+		$("#contentDiv").css("height", ($(window).height() * 0.9) + "px");
+	}
+
+	function ShowHideMenu(){
+		//$("#navbar").animate({"width": "toggle"}, { duration: 10 });
+		$("#navbar").animate({"width": "toggle"}, { duration: 0 });
+		menuHidden = menuHidden ? false : true;
+
+
+		if(menuHidden) {
+   			$("#contentDiv").css("width", "95%");
+		}
+		else{
+   			$("#contentDiv").css("width", "75%");
+		}
+
+		// Reload the iframe, if the filemanager is resized
+		if($('#content').contents().get(0).location.href.match("/filemanager") != null) {
+			$('#content').each(function() {
+ 				this.contentWindow.location.reload(true);
+			});
+		}
+
+	}
+
+</script>
+</head>
+
+<body id="indexBody" style="overflow: auto;">
+
+<div class="navbar navbar-inverse navbar-static-top">
+    <div class="contaner">
+        <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+         <span class="sr-only">Открыть</span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         </button>
+         <a href="start.xhtml" target="content" class="navbar-brand"><i class="fa fa-power-off" aria-hidden="true"></i> ioBroker.paw</a>
+
+                  </div>
+                  <div class="collapse navbar-collapse" id="menu">
+                      <ul class="nav navbar-nav">
+                          <li><a href="call.xhtml" target="content"><i class="fa fa-phone" aria-hidden="true"></i></a></li>
+                          <li><a href="sms.xhtml" target="content"><i class="fa fa-envelope-o" aria-hidden="true"></i></a></li>
+                          <li><a href="info.xhtml" target="content">info</a></li>
+                          <li><a href="dial.xhtml" target="content">Пункт 4</a></li>
+                      </ul>
+                  </div>
+              </div>
+              </div>
+</div>
+
+
+
+<div id="contentDiv">
+<table id="contentDivTable"><tr><td style="width: 100%; height:100%;">
+<iframe name="content" id="content" src="start.xhtml" frameborder="0" style="width: 100%; height: 100%; overflow: auto; margin: 0; border: 0; display: block;"></iframe>
+</td></tr></table>
+
+</div>
+
+</body>
+</html>
