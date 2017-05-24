@@ -78,19 +78,22 @@ while(keys.hasMoreElements()) {
 	key = keys.nextElement();
 	vals = volTable.get(key).split(":");
 	print("<tr><td>");
-	print("<img src='images/speaker.png' width='32' height='32' align='middle'>" + "&nbsp;&nbsp;<b>" + vals[0] + "</b>");
+	print("<img src='res/image/speaker.png' width='32' height='32' align='middle'>" + "&nbsp;&nbsp;<b>" + vals[0] + "</b>");
 	print("</td><td>");
 	print("<div id='slider_" + key +"' style='width: 200px;'></div>");
 	print("</td><td>");
 	print("&nbsp;&nbsp;" + vals[1]);
 	print("</td><td>");
-	print("<img id='loaderVol_" + key + "' src='images/loader.gif' style='display: none;' width='16'>");
+	print("<img id='loaderVol_" + key + "' src='res/image/loader.gif' style='display: none;' width='16'>");
 	print("</td></tr>");
 	print("<tr><td colspan='4'>&nbsp;</td></tr>");
 }
 </bsh>
 </table>
 </p>
+
+<i class="fa fa-volume-up" aria-hidden="true"></i>
+
 
 <p>&nbsp;</p>
 

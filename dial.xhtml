@@ -105,13 +105,13 @@ if(action != null) {
 							$$.print("<tr style='background:" + colour + ";'>");
 
 							if(c == 0) {
-								$$.print("<td><img src='graphics/contact_photo.xhtml?contactId=" + id + "' align='middle' style='width: 32px;'></td>");
+								$$.print("<td><img src='res/image/dial_icon.png' align='middle' style='width: 32px;'></td>");
 							}
 							else {
 								$$.print("<td>&nbsp;</td>");
 							}
 
-							print("<td style='color: black;'>" + (c > 0 ? "&nbsp;" : name) + "</td><td><a href='dial.xhtml?number=" + URLEncoder.encode(phoneNo) + "' class='link' style='color: black;'>" + phoneNo + "</a>" + (type == Phones.TYPE_MOBILE ? "<img src='images/phone.png' style='width: 14px;' title='" + translateRaw("tooltip.phone_mobile") + "'>" : "") + "</td>");
+							print("<td style='color: black;'>" + (c > 0 ? "&nbsp;" : name) + "</td><td><a href='dial.xhtml?number=" + URLEncoder.encode(phoneNo) + "' class='link' style='color: black;'>" + phoneNo + "</a></td>");
 
 							c++;
 						} while (curPhones.moveToNext());
@@ -121,70 +121,6 @@ if(action != null) {
 		}
 
 		curContacts .close();
-	}
-	else { // Old API
-		String[] contactsColumns = { People._ID, People.NAME, People.NUMBER};
-		String[] phonesColumns = { Phones.NUMBER, Phones.TYPE};
-
-		contactsUri = People.CONTENT_URI;
-		phonesUri = Phones.CONTENT_URI;
-		try {
-			curContacts = service.getContentResolver().query(contactsUri, contactsColumns, // Which columns to return
-				null, // WHERE clause; which rows to return(all rows)
-				null, // WHERE clause selection arguments (none)
-				"People.NAME ASC" // Order-by clause (ascending by name)
-				);
-
-			colour = "#eaeaea";
-
-			if (curContacts.moveToFirst()) {
-				do {
-				// Get the field values
-				name = curContacts.getString(curContacts.getColumnIndex(People.NAME));
-				id = curContacts.getString(curContacts.getColumnIndex(People._ID));
-
-				phonesWhere = "PERSON=" + id;
-
-				try {
-					curPhones = service.getContentResolver().query(phonesUri, phonesColumns, // Which columns to return
-						phonesWhere, // WHERE clause; which rows to return(all rows)
-						null, // WHERE clause selection arguments (none)
-						"Phones.NUMBER ASC" // Order-by clause (ascending by name)
-						);
-
-					if (curPhones.moveToFirst()) {
-						colour = colour.equals("#eaeaea") ? "white" : "#eaeaea";
-						c = 0;
-							do {
-							phoneNo = curPhones.getString(curPhones.getColumnIndex(Phones.NUMBER));
-							type = curPhones.getLong(curPhones.getColumnIndex(Phones.TYPE));
-
-							$$.print("<tr style='background:" + colour + ";'>");
-
-							if(c == 0) {
-								$$.print("<td><img src='graphics/contact_photo.xhtml?contactId=" + id + "' align='middle' style='width: 32px;'></td>");
-							}
-							else {
-								$$.print("<td>&nbsp;</td>");
-							}
-
-							print("<td style='color: black;'>" + (c > 0 ? "&nbsp;" : name) + "</td><td><a href='dial.xhtml?number=" + URLEncoder.encode(phoneNo) + "' class='link' style='color: black;'>" + phoneNo + "</a>" + (type == Phones.TYPE_MOBILE ? "<img src='images/phone.png' style='width: 14px;' title='" + translateRaw("tooltip.phone_mobile") + "'>" : "") + "</td>");
-							c++;
-						} while (curPhones.moveToNext());
-					}
-				}
-				finally {
-					curPhones.close();
-				}
-
-				print("</tr>");
-
-				} while (curContacts.moveToNext());
-			}
-		}
-		finally {
-			curContacts.close();
-		}
 	}
 </bsh>
 </table>
