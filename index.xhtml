@@ -82,27 +82,29 @@ print("<script type='text/javascript'> function setPawVersion() { $('#pawVersion
          </button>
          <a href="start.xhtml" target="content" class="navbar-brand"><i class="fa fa-power-off" aria-hidden="true"></i> ioBroker.paw</a>
 
-                  </div>
-                  <div class="collapse navbar-collapse" id="menu">
-                      <ul class="nav navbar-nav">
-                          <li><a href="call.xhtml" target="content"><i class="fa fa-phone" aria-hidden="true"></i></a></li>
-                          <li><a href="sms.xhtml" target="content"><i class="fa fa-envelope-o" aria-hidden="true"></i></a></li>
-                          <li><a href="info.xhtml" target="content">info</a></li>
-                          <li><a href="dial.xhtml" target="content">Пункт 4</a></li>
-                      </ul>
-                  </div>
-              </div>
-              </div>
+        </div>
+           <div class="collapse navbar-collapse" id="menu">
+               <ul class="nav navbar-nav">
+                 <li><a href="dial.xhtml" target="content"><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></i></a></li>
+                 <li><a href="call.xhtml" target="content"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="sms.xhtml" target="content"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"></i></i></a></li>
+                 <li><a href="volumes.xhtml" target="content"><i class="fa fa-music fa-2x" aria-hidden="true"></i></i></a></li>
+                 <li><a href="info.xhtml" target="content"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="console.xhtml" target="content"><i class="fa fa-linux fa-2x" aria-hidden="true"></i></a></li>
+                </ul>
+           </div>
+    </div>
 </div>
 
 
 
-<div id="contentDiv">
-<table id="contentDivTable"><tr><td style="width: 100%; height:100%;">
-<iframe name="content" id="content" src="start.xhtml" frameborder="0" style="width: 100%; height: 100%; overflow: auto; margin: 0; border: 0; display: block;"></iframe>
-</td></tr></table>
-
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" name="content" id="content" src="start.xhtml" allowfullscreen></iframe>
 </div>
+
+
+
+
 
 </body>
 </html>

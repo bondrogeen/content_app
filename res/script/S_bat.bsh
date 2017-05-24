@@ -1,0 +1,31 @@
+
+
+// Print stream to stdout
+printStream(stream) {
+ reader = new BufferedReader(new InputStreamReader(stream));
+ while ((line = reader.readLine()) != null) {
+ print(line);
+ }
+ reader.close();
+}
+// Execute shell command by using su command
+// If silent is true, there will be no output
+execRootShell(String[] commands , boolean silent) {
+ shellCmd = "su -c sh";
+ sh = Runtime.getRuntime().exec(shellCmd);
+ os = sh.getOutputStream();
+ for(cmd : commands) {
+ os.write((cmd + "\n").getBytes());
+ }
+
+ os.write(("exit\n").getBytes());
+ os.flush(); 
+ if(!silent) {
+ //printStream(sh.getInputStream());
+ //printStream(sh.getErrorStream());
+ }
+ sh.waitFor();
+}
+// Run uptime command and list files in /data/data
+execRootShell(new String[]{  "mount -o bind /sdcard/battery /sys/class/power_supply/battery"}, false);​
+
