@@ -16,6 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 
 jsonVar = new JSONObject();
+jsonServer = new JSONObject();
 
 send = parameters.get("send");
 text = parameters.get("text");
@@ -28,23 +29,34 @@ colour = parameters.get("colour");
 font = parameters.get("font");
 date = parameters.get("date");
 
-File file = new File(server.props.get("serviceContext").pawHome + "/html/settings.bsh");
+pawHome = server.props.get("serviceContext").pawHome;
+file = new File(pawHome +"/html/setting.json");
 
 if(file.exists()){
-	source(server.props.get("serviceContext").pawHome + "/html/settings.bsh");
-}
+    fin = new FileInputStream(file);
+		bin = new BufferedInputStream(fin);
+		byte[] contents = new byte[1024];
+		int bytesRead = 0;
+		String strFileContents;
+		while ((bytesRead = bin.read(contents)) != -1) {
+			strFileContents = new String(contents, 0, bytesRead);
+		}
+		bin.close();
 
+		jsonServer = new JSONObject(strFileContents);
+}
 
 service = server.props.get("serviceContext");
 
 void send_res(res,texthead,text){
-    url = "http://"+server_ip+":"+port+"/";
+
+    url = "http://"+jsonServer.get("server")+":"+jsonServer.get("port")+"/";
     client = new DefaultHttpClient();
     HttpPost post = new HttpPost(url);
     post.setHeader("User-Agent", "Mozilla/5.0");
     urlParameters = new ArrayList<NameValuePair>();
-    urlParameters.add(new BasicNameValuePair("device", device));
-    urlParameters.add(new BasicNameValuePair("namespace", namespace));
+    urlParameters.add(new BasicNameValuePair("device", jsonServer.get("device")));
+    urlParameters.add(new BasicNameValuePair("namespace", jsonServer.get("namespace")));
 	urlParameters.add(new BasicNameValuePair("res", res));
 	urlParameters.add(new BasicNameValuePair("send", send));
 	if(texthead!=null){
