@@ -3,8 +3,7 @@
 <bsh>source(server.props.get("serviceContext").pawHome + "/html/app/bsh/i18n.bsh");</bsh>
 <title><bsh>translate("dial_number.title");</bsh></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<link rel="stylesheet" href="css/default.css">
-<script type="text/javascript" src="js/jquery.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		// Set focus on first text field
@@ -14,9 +13,6 @@
 </head>
 <body>
 
-<h3><bsh>translate("dial_number.title");</bsh></h3>
-<bsh>translate("dial_number.description");</bsh>
-<p></p>
 <bsh>
 import android.app.Service;
 import android.content.Intent;
@@ -40,27 +36,6 @@ if(action != null) {
 }
 </bsh>
 
-<div style="width: 360px;">
-<form action="dial.xhtml" method="post">
-<input type="hidden" id="action" name="action" value="dial" />
-<table border="0">
-<tr><td>
-<bsh>print("<input type='text' name='number' style='background : #C9C9C9; border: 1px solid black; xbackground-image: url(images/dial_input_background.png); height: 36px; width: 300px; color: black; font-size: 20px;' value='" + (phoneNumber != null ? phoneNumber : "") + "'>");</bsh>
-</td>
-<td>
-<button type="submit" style="height: 36px;" title="<bsh>translate("dial_number.button");</bsh>"><img src="images/call_outgoing.png" />
-</td>
-<td>
-<button type="submit" onCLick="document.getElementById('action').value='endCall'" style="height: 36px;" title="<bsh>translate("dial_number.button_end");</bsh>"><img src="images/call_missed.png" /></button>
-</td></tr>
-</table>
-<p></p>
-</form>
-</div>
-
-<h3><bsh>translate("dial_number.subtitle");</bsh></h3>
-<bsh>translate("dial_number.subdescription");</bsh>
-<p></p>
 <bsh>
 	print("<div style='overflow: auto; height: 70%; width: 100%;'>");
 	print("<table border='0' cellpadding='4' cellspacing='0' style='width: 100%; font-size: 12px; border: 1px solid black;'>");

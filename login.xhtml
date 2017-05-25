@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/font-awesome.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+
+
+<bsh>source(server.props.get("serviceContext").pawHome + "/html/app/bsh/i18n.bsh");</bsh>
+
+<title><bsh>translate("login.title");</bsh></title>
+<bsh>
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.app.Service;
+
+service = server.props.get("serviceContext");
+preferences = service.getSharedPreferences("PawServer", 0);
+pawVersion = preferences.getString("Version", "na");
+</bsh>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript">
+
+	// Load in top frame
+	if (window != top) {
+		top.location.href = location.href;
+	}
+
+
+	$(document).ready(function() {
+
+        $("form[name=loginForm]").submit(function() {
+
+			$.post("check_login.xhtml", {username: $("[name=username]").val(), password: $("[name=password]").val()},
+		function(data) {
+			if(data.success) {
+				window.location.href='index.xhtml';
+
+			}
+			else {
+
+
+				$("#errorConsole").html(data.message).fadeIn();
+
+
+			}
+
+		}, "json");
+		return false;
+		});
+	});
+
+
+</script>
+
+</head>
+<body id="indexBody">
+
+
+<div class="navbar navbar-inverse navbar-static-top">
+    <div class="contaner">
+        <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+
+         </button>
+         <a href="#" target="content" class="navbar-brand"><i class="fa fa-power-off" aria-hidden="true"></i> ioBroker.paw</a>
+
+        </div>
+           <div class="collapse navbar-collapse" id="menu">
+               <ul class="nav navbar-nav">
+                </ul>
+           </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <h1 class="text-center login-title">Login</h1>
+            <div class="account-wall">
+                <center><i class="fa fa-user-circle-o fa-5x" aria-hidden="true"></i></center>
+                <form class="form-signin" name="loginForm" method="post">
+                <input type="text" class="form-control" placeholder="Login" name="username" required autofocus>
+                <input type="password" class="form-control" placeholder="Password"  name="password" required>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Sign in</button>
+
+                   <left> Default  login:admin Pass:paw </left><span class=error id="errorConsole"> </span>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>

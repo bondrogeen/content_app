@@ -3058,8 +3058,8 @@ fieldset[disabled] a.btn {
 }
 .btn-default {
   color: #333;
-  background-color: #fff;
-  border-color: #ccc;
+  background-color: #000;
+  border-color: #111;
 }
 .btn-default:focus,
 .btn-default.focus {
@@ -3115,19 +3115,19 @@ fieldset[disabled] .btn-default.focus {
 }
 .btn-primary {
   color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4;
+  background-color: #000000;
+  border-color: #101010;
 }
 .btn-primary:focus,
 .btn-primary.focus {
   color: #fff;
-  background-color: #286090;
-  border-color: #122b40;
+  background-color: #000000;
+  border-color: #101010;
 }
 .btn-primary:hover {
   color: #fff;
-  background-color: #286090;
-  border-color: #204d74;
+  background-color: #000000;
+  border-color: #101010;
 }
 .btn-primary:active,
 .btn-primary.active,
@@ -3163,8 +3163,8 @@ fieldset[disabled] .btn-primary:focus,
 .btn-primary.disabled.focus,
 .btn-primary[disabled].focus,
 fieldset[disabled] .btn-primary.focus {
-  background-color: #337ab7;
-  border-color: #2e6da4;
+  background-color: #000000;
+  border-color: #101010;
 }
 .btn-primary .badge {
   color: #337ab7;
@@ -5812,7 +5812,7 @@ button.list-group-item-danger.active:focus {
   border: 0;
 }
 .embed-responsive-16by9 {
-  padding-bottom: 65%;
+  padding-bottom: 80%;
 }
 .embed-responsive-4by3 {
   padding-bottom: 75%;
