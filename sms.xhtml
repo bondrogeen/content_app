@@ -13,7 +13,7 @@
 
 
 <table class="table">
-<tr class="first"><th>#</th><th>Имя</th><th>Номера</th><th>Сообщение</th><th>Дата</th><th>Время</th><th></th></tr>
+<tr class="first"><th class="numb">#</th><th class="tel">Имя</th><th class="msg">Сообщение</th><th class="date">Дата</th><th class="time">Время</th><th></th></tr>
 
 
 <bsh>
@@ -182,15 +182,15 @@ if (cursor != null) {
 						callTypeLabel = "";
 						switch(type) {
 							case "incoming":
-							callImage = "app/images/call_incoming.png";
+							callImage = "<i class='fa fa-arrow-down' aria-hidden='true'></i>";
 							//callTypeLabel = translateRaw("tooltip.phone_incoming");
 							break;
 							case "outgoing":
-							callImage = "app/images/call_outgoing.png";
+							callImage = "<i class='fa fa-arrow-up' aria-hidden='true'></i>";
 							//callTypeLabel = translateRaw("tooltip.phone_outgoing");
 							break;
 							case "draft":
-							callImage = "app/images/stop.png";
+							callImage = "<i class='fa fa-pencil' aria-hidden='true'></i>";
 
 							//callTypeLabel = translateRaw("tooltip.phone_missed");
 							break;
@@ -198,7 +198,7 @@ if (cursor != null) {
 						}
 
 						if(read==0){
-								read = "<img src='app/images/mail.png'>";
+								read = "<i class='fa fa-envelope' aria-hidden='true'></i>";
 							}else{
 								read = "";
 							}
@@ -207,9 +207,9 @@ if (cursor != null) {
 							//phoneLink = "<a href='app/dial.xhtml?number=" + URLEncoder.encode(callNumber) + "' class='link'>" + (callName != "null" ? callName : callNumber)  + "</a>";
 							phoneLink = name;
 						}else {
-							phoneLink = "Unknown";
+							phoneLink = address;
 							}
-							print("<tr><td>"+ ++position+"&nbsp;<img src='" + callImage + "' xalign='middle' title='" + callTypeLabel + "'></td><td>" + phoneLink  + "</td><td>"+address+"</td><td>"+body+"</td><td >"+date+"</td><td>"+time+"</td><td>" + read + "</td></tr>");
+							print("<tr><td>"+ ++position+"&nbsp;" + callImage + "</td><td class='tel' >"+phoneLink+"</td><td class='msg'>"+body+"</td><td >"+date+"</td><td>"+time+"</td><td>" + read + "</td></tr>");
 					}
 
 			//print("проверка");

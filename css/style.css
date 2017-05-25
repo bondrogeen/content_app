@@ -102,6 +102,41 @@
 
 .first {
     color: aliceblue;
-    background: #080808
+    background: #080808;
+
+}
+
+.numb {
+    width: 70px;
+}
+
+.fa-arrow-down {
+    color: brown;
+}
+
+.fa-arrow-up {
+    color: darkgreen;
+}
+
+.date {
+    width: 100px;
+}
+
+.time {
+    width: 80px;
+}
+
+.tel {
+    width: 125px;
+    text-align: right;
+}
+
+.msg {
+text-align: center;
+}
+
+.table {
+    font-size: 15px;
+    font-weight: bold;
 
 }
