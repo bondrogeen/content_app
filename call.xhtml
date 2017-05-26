@@ -4,22 +4,16 @@
 <bsh>source(server.props.get("serviceContext").pawHome + "/html/app/bsh/i18n.bsh");</bsh>
 <title>call</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<link rel="stylesheet" href="app/css/default.css">
-<style>
-   td {
-    text-align: center;
-   }
-   th {
-    text-align: center;
-   }
-</style>
+
+<link href="css/font-awesome.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
 
 </head>
 <body>
 
-<div style='overflow: auto; height: 100%; width: 100%;'>
-<table border='0' cellpadding='4' cellspacing='0' style='width: 100%; font-size: 14px; border: 1px solid black;'>
-<tr><th>№</th><th>Имя</th><th>Номера</th><th>Дата</th><th>Время</th><th>Длительность</th></tr>
+<table class="table">
+<tr class="first"><th class="sms_numb">#</th><th class="sms_name">Имя</th><th class="sms_date" >Дата</th><th class="sms_time">Время</th><th class="duration">Длит.</th></tr>
 
 
 <bsh>
@@ -195,15 +189,15 @@ if (cursor != null) {
 
 				switch(callType) {
 					case CallLog.Calls.INCOMING_TYPE:
-						callImage = "app/images/call_incoming.png";
+						callImage = "<i class='fa fa-arrow-down' aria-hidden='true'></i>";
 						callTypeLabel = "incoming";
 						break;
 					case CallLog.Calls.OUTGOING_TYPE:
-						callImage = "app/images/call_outgoing.png";
+						callImage = "<i class='fa fa-arrow-up' aria-hidden='true'></i>";
 						callTypeLabel = "outgoing";
 						break;
 					case CallLog.Calls.MISSED_TYPE:
-						callImage = "app/images/call_missed.png";
+						callImage = "<i class='fa fa-pencil' aria-hidden='true'></i>";
 						callTypeLabel = "missed";
 						break;
 				}
@@ -211,13 +205,12 @@ if (cursor != null) {
 
 			if(!callNumber.equals("-1")) {
 					phoneLink = "<a href='app/dial.xhtml?number=" + URLEncoder.encode(callNumber) + "' style='color: black;' class='link'>" + (callName != "null" ? callName : callNumber)  + "</a>";
-				//phoneLink = "Unknown";
 				}
 				else {
 					phoneLink = "Unknown";
 				}
 
-				print("<tr style='background:"+colour+";'><td style='width: 50px; text-align:right;'>"+ ++position+"&nbsp;<img src='" + callImage + "'style='width: 16px;'  xalign='middle' title='" + callTypeLabel + "'></td><td style='width: 20%;'>" + phoneLink  + "</td><td style='width: 20%; color: black;'>"+callNumber+"</td><td style='color: black;'>"+date+"</td><td style='color: black;'>"+time+"</td><td style='color: black; width: 5%;'>" + callDuration + "</td></tr>");
+				print("<tr><td class='sms_numb'>"+ ++position+"&nbsp;" + callImage + "</td><td class='sms_name'>" + phoneLink  + "</td><td class='sms_date'>"+date+"</td><td class='sms_time'>"+time+"</td><td class='duration'>" + callDuration + "</td></tr>");
 
 
 		}
@@ -263,7 +256,7 @@ request.out.flush();
 request.out.close();
 
 }else{
-	print("</table></div>");
+	print("</table>");
 }
 
 

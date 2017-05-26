@@ -4,8 +4,11 @@
 <bsh>source(server.props.get("serviceContext").pawHome + "/html/app/bsh/i18n.bsh");</bsh>
 
 <title><bsh>translate("volumes.title");</bsh></title>
-<link rel="stylesheet" href="css/default.css">
+
 <link type="text/css" href="css/overcast/jquery-ui.css" rel="Stylesheet" />
+<link href="css/font-awesome.css" rel="stylesheet">
+
+
 
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/jquery-ui.js"></script>
@@ -65,12 +68,7 @@ volTable.put("STREAM_VOICE_CALL", translateRaw("volumes.label.call") + ":" + tra
 
 <body>
 
-<h3><bsh>translate("volumes.title");</bsh></h3>
-<p>
-<bsh>translate("volumes.info");</bsh>
-</p>
-<form><input type="submit" value="<bsh>translate("volumes.button.refresh");</bsh>"></form>
-<p>
+<center>
 <table>
 <bsh>
 keys = volTable.keys();
@@ -78,21 +76,19 @@ while(keys.hasMoreElements()) {
 	key = keys.nextElement();
 	vals = volTable.get(key).split(":");
 	print("<tr><td>");
-	print("<img src='res/image/speaker.png' width='32' height='32' align='middle'>" + "&nbsp;&nbsp;<b>" + vals[0] + "</b>");
+	print("<i class='fa fa-volume-up' aria-hidden='true'></i>" + "&nbsp;&nbsp;<b>" + vals[0] + "</b>");
 	print("</td><td>");
 	print("<div id='slider_" + key +"' style='width: 200px;'></div>");
 	print("</td><td>");
 	print("&nbsp;&nbsp;" + vals[1]);
 	print("</td><td>");
-	print("<img id='loaderVol_" + key + "' src='res/image/loader.gif' style='display: none;' width='16'>");
+	print("<img id='loaderVol_" + key + "'>");
 	print("</td></tr>");
 	print("<tr><td colspan='4'>&nbsp;</td></tr>");
 }
 </bsh>
 </table>
 </p>
-
-<i class="fa fa-volume-up" aria-hidden="true"></i>
 
 
 <p>&nbsp;</p>
@@ -108,6 +104,6 @@ audioMgr = service.getSystemService(Context.AUDIO_SERVICE);
 audioMgr.setStreamVolume(eval("AudioManager.%stream%"), %volume%, 0);
 
 </textarea>
-
+</center>
 </body>
 </html>

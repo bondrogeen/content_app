@@ -4,11 +4,51 @@
 <title><bsh>translate("dial_number.title");</bsh></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
+<link href="css/font-awesome.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+
+
+
+<script src="js/bootstrap.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		// Set focus on first text field
-		$("input:text:visible:first").focus();
+
 	});
+
+
+    function set(event) {
+	var target;
+	if (!event) {
+		var event = window.event;
+	}
+	if (event.target) {
+		target = event.target;
+	} else if (event.srcElement) {
+		target = event.srcElement;
+	}
+	if (target) {
+		if (target.nodeType == 3) {
+			target = target.parentNode;
+		}
+		if (target.tagName.toLowerCase() == "td") {
+			var row = target.parentNode;
+			var td;
+			var str = "";
+			for (var j = 0; (td = row.getElementsByTagName("td").item(j)); j++) {
+				str += td.innerHTML + "\n";
+			}
+			alert(str);
+		}
+
+	}
+}
+
+
+
+
 </script>
 </head>
 <body>
@@ -36,67 +76,64 @@ if(action != null) {
 }
 </bsh>
 
+<table class="table">
+<tr class="first"><th class="numb">#</th><th class="call_name">Имя</th><th class="call_phone">Номер</th></tr>
+
 <bsh>
-	print("<div style='overflow: auto; height: 70%; width: 100%;'>");
-	print("<table border='0' cellpadding='4' cellspacing='0' style='width: 100%; font-size: 12px; border: 1px solid black;'>");
-	print("<tr><th>&nbsp;</th><th style='text-align: left;'>" + translateRaw("dial_number.table.name") + "</th><th style='text-align: left;'>" + translateRaw("dial_number.table.phone") + "</th></tr>");
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.widget.TextView;
 
-	// Switch between new and old Contacts API
-	if(Integer.parseInt(android.os.Build.VERSION.SDK) >= 5) {
-		String[] contactsColumns = { android.provider.ContactsContract.Data.RAW_CONTACT_ID, android.provider.ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME };
-		String[] phonesColumns = { android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER, android.provider.ContactsContract.CommonDataKinds.Phone.TYPE};
+service = server.props.get("serviceContext");
 
-		contactsUri = android.provider.ContactsContract.Data.CONTENT_URI;
-		phonesUri = android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+String phoneNumber = null;
 
-		curContacts = service.getContentResolver().query(contactsUri, contactsColumns, // Which columns to return
-			  android.provider.ContactsContract.CommonDataKinds.StructuredName.MIMETYPE + "=?",
-			  new String[] { android.provider.ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE },
-			  android.provider.ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME + " ASC" // Order-by clause (ascending by name)
-			  );
+//Связываемся с контактными данными и берем с них значения id контакта, имени контакта и его номера:
+Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
+String _ID = ContactsContract.Contacts._ID;
+String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
+String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
+Uri PhoneCONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+String Phone_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
+String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
 
-		colour = "#eaeaea";
 
-		if(curContacts .moveToFirst()) {
-		do {
+StringBuffer output = new StringBuffer();
+contentResolver = service.getContentResolver();
+Cursor cursor = contentResolver.query(CONTENT_URI, null,null, null, null);
 
-			id = curContacts.getString(curContacts .getColumnIndex(android.provider.ContactsContract.Data.RAW_CONTACT_ID));
-			name = curContacts.getString(curContacts .getColumnIndex(android.provider.ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
+ //Запускаем цикл обработчик для каждого контакта:
+ if (cursor.getCount() > 0) {
+     //Если значение имени и номера контакта больше 0 (то есть они существуют) выбираем
+     //их значения в приложение привязываем с соответствующие поля "Имя" и "Номер":
+     while (cursor.moveToNext()) {
+         position = cursor.getPosition();
+         String contact_id = cursor.getString(cursor.getColumnIndex( _ID ));
+         String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
+         int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
+         //Получаем имя:
+         if (hasPhoneNumber > 0) {
+             output.append("\n Имя: " + name);
+             Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null,Phone_CONTACT_ID + " = ?", new String[] { contact_id }, null);
+             //и соответствующий ему номер:
+             while (phoneCursor.moveToNext()) {
+                 phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
+                 output.append("\n Телефон: " + phoneNumber);
+                 }
+             }
+         print("<tr class='click' onclick='set(event)' ><td class='numb'>" + ++position + "&nbsp;<i class='fa fa-address-book' aria-hidden='true'></i></td><td class='call_name' >"+name+"</td><td class='call_phone'>"+phoneNumber+"</td></tr>");
 
-			phonesWhere = android.provider.ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID + "=" + id;
-			curPhones = service.getContentResolver().query(phonesUri, phonesColumns, // Which columns to return
-						phonesWhere, // WHERE clause; which rows to return(all rows)
-						null, // WHERE clause selection arguments (none)
-						android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER + " ASC" // Order-by clause (ascending by name)
-						);
+         }
 
-			if (curPhones.moveToFirst()) {
-						colour = colour.equals("#eaeaea") ? "white" : "#eaeaea";
-						c = 0;
-						do {
-							phoneNo = curPhones.getString(curPhones.getColumnIndex(android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER));
-							type = curPhones.getLong(curPhones.getColumnIndex(android.provider.ContactsContract.CommonDataKinds.Phone.TYPE));
+     }
 
-							$$.print("<tr style='background:" + colour + ";'>");
 
-							if(c == 0) {
-								$$.print("<td><img src='res/image/dial_icon.png' align='middle' style='width: 32px;'></td>");
-							}
-							else {
-								$$.print("<td>&nbsp;</td>");
-							}
 
-							print("<td style='color: black;'>" + (c > 0 ? "&nbsp;" : name) + "</td><td><a href='dial.xhtml?number=" + URLEncoder.encode(phoneNo) + "' class='link' style='color: black;'>" + phoneNo + "</a></td>");
 
-							c++;
-						} while (curPhones.moveToNext());
-			}
-			curPhones.close();
-		} while(curContacts .moveToNext());
-		}
-
-		curContacts .close();
-	}
 </bsh>
 </table>
 </div>

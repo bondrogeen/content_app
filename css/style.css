@@ -104,10 +104,13 @@
     color: aliceblue;
     background: #080808;
 
+
+
 }
 
 .numb {
-    width: 70px;
+    width: 60px;
+    text-align: right;
 }
 
 .fa-arrow-down {
@@ -139,4 +142,63 @@ text-align: center;
     font-size: 15px;
     font-weight: bold;
 
+}
+
+.duration {
+    width: 100px;
+    text-align: right;
+
+
+}
+
+.sms_name {
+
+    text-align: center;
+}
+
+.sms_date {
+
+    text-align: center;
+}
+
+.sms_numb {
+    width: 60px;
+    text-align: right;
+}
+
+.sms_time {
+    width: 100px;
+    text-align: center;
+}
+
+.first {
+    overflow-x: auto;
+
+}
+
+.tboby {
+    display: block;
+}
+
+tboby {
+    display: block;
+}
+
+.call_name {
+    width: auto;
+    text-align: center;
+}
+
+.call_phone {
+    width: auto;
+    text-align: center;
+}
+
+tr:hover {
+    background: #080808; /* Цвет фона при наведении */
+    color: #fff; /* Цвет текста при наведении */
+   }
+
+.click {
+    cursor:pointer;
 }
