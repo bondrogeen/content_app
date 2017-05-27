@@ -114,7 +114,7 @@
 }
 
 .fa-arrow-down {
-    color: brown;
+    color: cornflowerblue;
 }
 
 .fa-arrow-up {
@@ -151,22 +151,22 @@ text-align: center;
 
 }
 
-.sms_name {
+.call_name {
 
     text-align: center;
 }
 
-.sms_date {
+.call_date {
 
     text-align: center;
 }
 
-.sms_numb {
+.call_numb {
     width: 60px;
     text-align: right;
 }
 
-.sms_time {
+.call_time {
     width: 100px;
     text-align: center;
 }
@@ -179,6 +179,9 @@ text-align: center;
 .tboby {
     display: block;
 }
+
+
+
 
 tboby {
     display: block;
@@ -202,3 +205,20 @@ tr:hover {
 .click {
     cursor:pointer;
 }
+
+.fa-times-circle-o {
+    color: darkred;
+}
+
+.fa-times {
+    color: #bb0000;
+}
+
+
+.iframe {
+    width: 100%;
+    border: none;
+
+
+}
+

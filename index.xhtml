@@ -3,14 +3,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/overcast/jquery-ui.css" rel="Stylesheet" />
-<link rel="stylesheet" href="css/default.css">
+
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/font-awesome.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
 
 <bsh>source(server.props.get("serviceContext").pawHome + "/html/auth.bsh");</bsh>
-
 <bsh>
-// Set PAW Version
+
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.app.Service;
@@ -19,61 +19,32 @@ service = (Service) server.props.get("serviceContext");
 preferences = service.getSharedPreferences("PawServer", 0);
 pawVersion = preferences.getString("Version", "na");
 
-// Put version into server scope
 serverPut("pawVersion", pawVersion);
-
-print("<script type='text/javascript'> function setPawVersion() { $('#pawVersion').html('" + pawVersion + "'); }</script>");
 </bsh>
 
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/jquery-ui.js"></script>
-
+<script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.js"></script>
-
 
 <script type="text/javascript">
 	var menuHidden = false;
 	$(document).ready(function() {
-		resizeIframe();
-		setPawVersion();
-		$("#accordion").accordion();
-		updateStatusbar();
+        $("#contentDiv").css("height", ($(window).height() * 0.9) + "px");
+        $("#contentDiv").css("overflow-y", "scroll");
+
+
 	});
 
-	$(window).bind('resize', function() {
-		resizeIframe();
-	});
-
-	function resizeIframe() {
-		$("#contentDiv").css("height", ($(window).height() * 0.9) + "px");
-	}
-
-	function ShowHideMenu(){
-		//$("#navbar").animate({"width": "toggle"}, { duration: 10 });
-		$("#navbar").animate({"width": "toggle"}, { duration: 0 });
-		menuHidden = menuHidden ? false : true;
+    function click(){
+        console.log("click");
 
 
-		if(menuHidden) {
-   			$("#contentDiv").css("width", "95%");
-		}
-		else{
-   			$("#contentDiv").css("width", "75%");
-		}
+    }
 
-		// Reload the iframe, if the filemanager is resized
-		if($('#content').contents().get(0).location.href.match("/filemanager") != null) {
-			$('#content').each(function() {
- 				this.contentWindow.location.reload(true);
-			});
-		}
-
-	}
 
 </script>
 </head>
 
-<body id="indexBody" style="overflow: auto;">
+<body>
 
 <div class="navbar navbar-inverse navbar-static-top">
     <div class="contaner">
@@ -89,12 +60,12 @@ print("<script type='text/javascript'> function setPawVersion() { $('#pawVersion
         </div>
            <div class="collapse navbar-collapse" id="menu">
                <ul class="nav navbar-nav">
-                 <li><a href="dial.xhtml" target="content"><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></i></a></li>
-                 <li><a href="call.xhtml" target="content"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="sms.xhtml" target="content"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"></i></i></a></li>
-                 <li><a href="volumes.xhtml" target="content"><i class="fa fa-music fa-2x" aria-hidden="true"></i></i></a></li>
-                 <li><a href="info.xhtml" target="content"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="console.xhtml" target="content"><i class="fa fa-linux fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="dial.xhtml" target="iframe"><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></i></a></li>
+                 <li><a href="call.xhtml" target="iframe"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="sms.xhtml" target="iframe"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"></i></i></a></li>
+                 <li><a href="volumes.xhtml" target="iframe"><i class="fa fa-music fa-2x" aria-hidden="true"></i></i></a></li>
+                 <li><a href="info.xhtml" target="iframe"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="console.xhtml" target="iframe"><i class="fa fa-linux fa-2x" aria-hidden="true"></i></a></li>
                 </ul>
            </div>
     </div>
@@ -102,11 +73,7 @@ print("<script type='text/javascript'> function setPawVersion() { $('#pawVersion
 
 
 
-<div class="embed-responsive embed-responsive-16by9">
-  <iframe class="embed-responsive-item" name="content" id="content" src="start.xhtml" allowfullscreen></iframe>
-</div>
-
-
+<iframe class="iframe" name="iframe" id="contentDiv" width: 100% src="start.xhtml" ></iframe>
 
 
 

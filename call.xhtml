@@ -13,7 +13,7 @@
 <body>
 
 <table class="table">
-<tr class="first"><th class="sms_numb">#</th><th class="sms_name">Имя</th><th class="sms_date" >Дата</th><th class="sms_time">Время</th><th class="duration">Длит.</th></tr>
+<tr class="first"><th class="call_numb">#</th><th class="call_name">Имя</th><th class="call_date" >Дата</th><th class="call_time">Время</th><th class="duration">Длит.</th></tr>
 
 
 <bsh>
@@ -32,6 +32,7 @@ c = Calendar.getInstance();
 
 d = new SimpleDateFormat("dd-MM-yyyy");
 t = new SimpleDateFormat("HH:mm:ss");
+
 date_now = d.format(c.getTime());
 time_now = t.format(c.getTime());
 
@@ -184,8 +185,24 @@ if (cursor != null) {
 
 		}else{
 
-			callImage = "";
-				callTypeLabel = "";
+            int i = callDuration;
+            Sec = i   % 60;
+            Min = i  / 60 % 60;
+            if(Min>0){
+                if(Sec<10){
+                    callDuration = Min+":0"+Sec;
+                }else{
+                    callDuration = Min+":"+Sec;
+                }
+
+            }else{
+                callDuration = Sec;
+            }
+
+
+
+            callImage = "";
+			callTypeLabel = "";
 
 				switch(callType) {
 					case CallLog.Calls.INCOMING_TYPE:
@@ -193,24 +210,25 @@ if (cursor != null) {
 						callTypeLabel = "incoming";
 						break;
 					case CallLog.Calls.OUTGOING_TYPE:
-						callImage = "<i class='fa fa-arrow-up' aria-hidden='true'></i>";
+		 				callImage = "<i class='fa fa-arrow-up' aria-hidden='true'></i>";
 						callTypeLabel = "outgoing";
 						break;
 					case CallLog.Calls.MISSED_TYPE:
-						callImage = "<i class='fa fa-pencil' aria-hidden='true'></i>";
+						callImage = "<i class='fa fa-times' aria-hidden='true'></i>";
 						callTypeLabel = "missed";
 						break;
 				}
 
 
 			if(!callNumber.equals("-1")) {
-					phoneLink = "<a href='app/dial.xhtml?number=" + URLEncoder.encode(callNumber) + "' style='color: black;' class='link'>" + (callName != "null" ? callName : callNumber)  + "</a>";
+
+					phoneLink =	(callName != "null") ? callName : callNumber ;
 				}
 				else {
 					phoneLink = "Unknown";
 				}
 
-				print("<tr><td class='sms_numb'>"+ ++position+"&nbsp;" + callImage + "</td><td class='sms_name'>" + phoneLink  + "</td><td class='sms_date'>"+date+"</td><td class='sms_time'>"+time+"</td><td class='duration'>" + callDuration + "</td></tr>");
+				print("<tr><td class='call_numb'>"+ ++position+"&nbsp;" + callImage + "</td><td class='call_name'>" + phoneLink  + "</td><td class='call_date'>"+date+"</td><td class='call_time'>"+time+"</td><td class='duration'>" + callDuration + "</td></tr>");
 
 
 		}
@@ -251,7 +269,7 @@ sand_date=arr;
 
 
 if(send!=null){
-request.sendResponse(sand_date.toString().getBytes(), "text/plain; charset=UTF-8");
+request.sendResponse(sand_date.toString().getBytes(), "text/plain; charset=UTF-8 ");
 request.out.flush();
 request.out.close();
 
