@@ -243,15 +243,15 @@ total.put("outgoing", outgoing);
 total.put("incoming", incoming);
 total.put("new_sms", new_sms);
 
+
+if(send!=null){
+
 if(send.equals("info")){
 sand_date=total;
 }else{
 sand_date=arr;
 }
 
-
-
-if(send!=null){
 request.sendResponse(sand_date.toString().getBytes(), "text/plain; charset=UTF-8");
 request.out.flush();
 request.out.close();

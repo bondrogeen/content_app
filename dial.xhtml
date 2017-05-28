@@ -203,37 +203,23 @@ Cursor cursor = contentResolver.query(CONTENT_URI, null,null, null, null);
 
 </bsh>
 </table>
-</div>
-</div>
+
 
 <div id="myModal" class="modal fade">
 <div class="modal-dialog">
 <div class="modal-content">
 <div class="modal-header"><button class="close" type="button" data-dismiss="modal">×</button>
 <h4 class="modal-title" id="name">Имя</h4></div>
-
 <div class="modal-body">
-
 <label id="messageLabel" for="message">Сообщение </label>
 <textarea class="form-control input-sm " type="textarea" id="message" placeholder="Текст сообщения" maxlength="140" rows="7"></textarea>
 <span class="help-block"><p id="characterLeft" class="help-block "></p></span>
-
-
 <button onclick="post('sms')" class="form-control input-sm btn btn-info disabled" id="btnSubmit" name="btnSubmit" type="button" > Отправить</button>
-
-
-
 </div>
-
-
-
 <div class="modal-footer">
 <button id="btn_call" onclick="post('call')" type="button" class="btn btn-success btn-lg btn-block">Звонок</button>
 <button onclick="post('endсall')" type="button" class="btn btn-danger btn-lg btn-block">Отбой</button>
 </div>
-
-
-
 </div>
 </div>
 </div>

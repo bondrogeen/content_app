@@ -9,7 +9,110 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
 
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script type="text/javascript">
+
+    var name;
+    var phone;
+    var text;
+
+	$(document).ready(function() {
+
+         $('#myModal').on('show.bs.modal', function (event) {
+            var target;
+            var event = window.event;
+            if (event.target) {
+                target = event.target;
+            } else if (event.srcElement) {
+                target = event.srcElement;
+                }
+            if (target) {
+                if (target.nodeType == 3) {
+                    target = target.parentNode;
+                }
+            if (target.tagName.toLowerCase() == "td") {
+                var row = target.parentNode;
+                var td;
+                var str = "";
+                for (var j = 0; (td = row.getElementsByTagName("td").item(j)); j++) {
+                    str += td.innerHTML + "\n";
+                    }
+                //alert(str);
+                }
+
+                name = row.getElementsByTagName("td").item(1).innerHTML
+                phone = row.getElementsByTagName("td").item(2).innerHTML
+
+                $('#name').text(name);
+                console.log( name + ":" + phone);
+            }
+        });
+
+        $('#characterLeft').text('0');
+        $('#message').keyup(function () {
+
+            var len = $(this).val().length;
+                var ch = len;
+                $('#characterLeft').text(ch + '');
+                $('#btnSubmit').removeClass('disabled');
+                $('#characterLeft').removeClass('red');
+
+            });
+
+
+	});
+
+
+    function post(val){
+
+        console.log(val);
+
+
+        if(val=="call"){
+            $('#btn_call').text("Соединение...");
+        }else if(val=="endсall"){
+            $('#btn_call').text("Звонок");
+            $('#message').val("");
+        }else if(val=="sms"){
+             text = $('#message').val();
+            $('#btnSubmit').text("Отправка...");
+        }
+
+        $.post( "set.xhtml", { send: val, number: phone,text: text }).done(function( data ) {
+            //console.log(JSON.parse(data));
+            try {
+                data = JSON.parse(data);
+                if(data.call=="true"){
+                    $('#btn_call').text("Звонок");
+                }else if(data.call=="false"){
+                    $('#btn_call').text("Ошибка");
+                }
+
+                if(data.sms=="true"){
+                    $('#btnSubmit').text("Отправить");
+                    $('#characterLeft').text("0");
+                    $('#message').val("");
+
+                }else if(data.sms=="false"){
+                    $('#btnSubmit').text("Ошибка");
+                }
+
+
+            } catch (exception) {
+                data = null;
+            }
+
+
+
+        });
+    }
+
+
+
+</script>
 </head>
+
 <body>
 
 <table class="table">
@@ -189,7 +292,8 @@ if (cursor != null) {
             Sec = i   % 60;
             Min = i  / 60 % 60;
             if(Min>0){
-                if(Sec<10){
+
+                if (Sec < 10) {
                     callDuration = Min+":0"+Sec;
                 }else{
                     callDuration = Min+":"+Sec;
@@ -228,7 +332,7 @@ if (cursor != null) {
 					phoneLink = "Unknown";
 				}
 
-				print("<tr><td class='call_numb'>"+ ++position+"&nbsp;" + callImage + "</td><td class='call_name'>" + phoneLink  + "</td><td class='call_date'>"+date+"</td><td class='call_time'>"+time+"</td><td class='duration'>" + callDuration + "</td></tr>");
+				print("<tr class='click' data-toggle='modal' data-target='#myModal' ><td class='call_numb'>"+ ++position+"&nbsp;" + callImage + "</td><td class='call_name'>" + phoneLink  + "</td><td class='call_date'>"+date+"</td><td class='call_time'>"+time+"</td><td class='duration'>" + callDuration + "</td></tr>");
 
 
 		}
@@ -260,15 +364,14 @@ total.put("outgoing", outgoing);
 total.put("incoming", incoming);
 total.put("unread", new_call);
 
+if(send!=null){
+
 if(send.equals("info")){
 sand_date=total;
 }else{
 sand_date=arr;
 }
 
-
-
-if(send!=null){
 request.sendResponse(sand_date.toString().getBytes(), "text/plain; charset=UTF-8 ");
 request.out.flush();
 request.out.close();
@@ -277,8 +380,27 @@ request.out.close();
 	print("</table>");
 }
 
-
-
 </bsh>
+
+<div id="myModal" class="modal fade">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header"><button class="close" type="button" data-dismiss="modal">×</button>
+<h4 class="modal-title" id="name">Имя</h4></div>
+<div class="modal-body">
+<label id="messageLabel" for="message">Сообщение </label>
+<textarea class="form-control input-sm " type="textarea" id="message" placeholder="Текст сообщения" maxlength="140" rows="7"></textarea>
+<span class="help-block"><p id="characterLeft" class="help-block "></p></span>
+<button onclick="post('sms')" class="form-control input-sm btn btn-info disabled" id="btnSubmit" name="btnSubmit" type="button" > Отправить</button>
+</div>
+<div class="modal-footer">
+<button id="btn_call" onclick="post('call')" type="button" class="btn btn-success btn-lg btn-block">Звонок</button>
+<button onclick="post('endсall')" type="button" class="btn btn-danger btn-lg btn-block">Отбой</button>
+</div>
+</div>
+</div>
+</div>
+
+
 </body>
 </html>

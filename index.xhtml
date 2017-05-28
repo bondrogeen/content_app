@@ -34,9 +34,10 @@ serverPut("pawVersion", pawVersion);
 
 	});
 
-    function click(){
-        console.log("click");
-
+    function click(iframe_link){
+        console.log(iframe_link);
+        //dial.xhtml
+        document.all['iframe'].src=iframe_link;
 
     }
 
@@ -60,12 +61,12 @@ serverPut("pawVersion", pawVersion);
         </div>
            <div class="collapse navbar-collapse" id="menu">
                <ul class="nav navbar-nav">
-                 <li><a href="dial.xhtml" target="iframe"><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></i></a></li>
-                 <li><a href="call.xhtml" target="iframe"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="sms.xhtml" target="iframe"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"></i></i></a></li>
-                 <li><a href="volumes.xhtml" target="iframe"><i class="fa fa-music fa-2x" aria-hidden="true"></i></i></a></li>
-                 <li><a href="info.xhtml" target="iframe"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="console.xhtml" target="iframe"><i class="fa fa-linux fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></i></a></li>
+                 <li><a href="javascript:click('call.xhtml')"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('sms.xhtml')"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"></i></i></a></li>
+                 <li><a href="javascript:click('volumes.xhtml')"><i class="fa fa-music fa-2x" aria-hidden="true"></i></i></a></li>
+                 <li><a href="javascript:click('info.xhtml')"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('console.xhtml')"><i class="fa fa-linux fa-2x" aria-hidden="true"></i></a></li>
                 </ul>
            </div>
     </div>
