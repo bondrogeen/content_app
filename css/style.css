@@ -218,7 +218,147 @@ tr:hover {
 .iframe {
     width: 100%;
     border: none;
+}
+
+
+.read {
+    color: red;
+}
+
+.green {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight :bold;
+    position: relative;
+    display: inline-block;
+    width: 150px;
+    height: 50px;
+    line-height: 2.5em;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+
+    color: #00b000;
+    outline: none;
+    border: 2px solid #000 ;
+    border-radius: 5px;
+    box-shadow: 0 0 1em #555;
+    background: linear-gradient(#000, #333 48%, #222 52%, #555);
+}
+
+.green:active {
+    top: .05em;
+     box-shadow: 0 0 0 #555;
+    color: #0c0;
+}
+
+.green:hover {
 
 
 }
+
+.red {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight :bold;
+    position: relative;
+    display: inline-block;
+    width: 150px;
+    height: 50px;
+    line-height: 2.5em;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+
+    color: #d00000;
+    outline: none;
+    border: 2px solid #000 ;
+    border-radius: 5px;
+    box-shadow: 0 0 1em #555;
+    background: linear-gradient(#000, #333 48%, #222 52%, #555);
+}
+
+.red:active {
+    top: .05em;
+     box-shadow: 0 0 0 #555;
+    color: #f00000;
+}
+
+.red:hover {
+
+}
+
+.btn_sms {
+
+    left: auto;
+    font-size: 18px;
+    font-weight :bold;
+    position: relative;
+    display: inline-block;
+    width: auto;
+    min-width: 70px;
+    height: 50px;
+    line-height: 2.5em;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+
+    color: #9999ff;
+    outline: none;
+    border: 2px solid #000 ;
+    border-radius: 5px;
+    box-shadow: 0 0 1em #555;
+    background: linear-gradient(#000, #333 48%, #222 52%, #555);
+}
+
+.btn_sms:active {
+    top: .05em;
+     box-shadow: 0 0 0 #555;
+    color: #0000cc;
+}
+
+.btn_sms:hover {
+
+}
+
+.btn_line {
+    display: inline-block;
+    text-align: justify;
+
+}
+
+.parent{
+        width:auto;
+        padding:5px;
+        white-space:nowrap;
+    }
+
+
+
+
+
+
+.text {
+    margin: 50px;
+    text-indent: 20px;
+   font-size: 15px;
+}
+
+h2 {
+    text-indent: -20px;
+}
+
+h1 {
+    text-indent: -20px;
+}
+
+.str{color:red}/* Строки красные */
+.func{color:blue}/* Юзер-функции синие */
+.comm{color:#555}/* Комменты оранжевые */
+.kwrd{font-weight:bold}/* Ключевые слова полужирные */
+.str span{color:red;font-weight:normal}/* Всё внутри строки — строка */
+.comm span{color:orange;font-weight:normal}/* Всё внутри комментария — комментарий */
+
 

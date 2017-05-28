@@ -67,25 +67,18 @@
 
 </head>
 <body>
-
 <h3>BeanShell Console</h3>
-<bsh>translate("general.label.no_translation");</bsh>
 <pre>
 <bsh>
 output = "OS: " + System.getProperty("os.name") +
 		                   " (" + System.getProperty("os.version") + "/" +
-				   System.getProperty("os.arch") + ")\n";
-
-  		     output += "Java Version: " +
-		                  System.getProperty("java.version") + " (" +
-				  System.getProperty("java.vendor") + ")";
+				   System.getProperty("os.arch") + ")";
 $$.print(output);
 </bsh>
 BeanShell Version: <bsh>printBanner();</bsh></pre>
 
 <bsh>code = parameters.get("code");</bsh>
 
-<h3>BeanShell Code:</h3>
 <textarea id='code' rows='15' style='width: 80%; font-size: 12px;'>
 // Enter code here...
 

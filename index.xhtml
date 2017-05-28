@@ -31,6 +31,24 @@ serverPut("pawVersion", pawVersion);
         $("#contentDiv").css("height", ($(window).height() * 0.9) + "px");
         $("#contentDiv").css("overflow-y", "scroll");
 
+        console.log("test");
+
+        $.post( "sms.xhtml", { send: "info" }).done(function( data ) {
+            console.log(data);
+
+            try {
+                data = JSON.parse(data);
+                console.log(data.new_sms);
+                if(data.new_sms>0){
+                    $('#sms_bange').text(data.new_sms);
+                }else{
+
+                }
+
+            } catch (exception) {
+
+            }
+        });
 
 	});
 
@@ -59,16 +77,30 @@ serverPut("pawVersion", pawVersion);
          <a href="start.xhtml" target="content" class="navbar-brand"><i class="fa fa-power-off" aria-hidden="true"></i> ioBroker.paw</a>
 
         </div>
-           <div class="collapse navbar-collapse" id="menu">
-               <ul class="nav navbar-nav">
-                 <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></i></a></li>
+           <div class="collapse navbar-collapse " id="menu">
+
+               <ul class="nav navbar-nav ">
+                 <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('call.xhtml')"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('sms.xhtml')"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"></i></i></a></li>
-                 <li><a href="javascript:click('volumes.xhtml')"><i class="fa fa-music fa-2x" aria-hidden="true"></i></i></a></li>
+                 <li><a href="javascript:click('sms.xhtml')"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"> <span id="sms_bange" class="badge"></span></i></a></li>
+                 <li><a href="javascript:click('volumes.xhtml')"><i class="fa fa-music fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('info.xhtml')"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('console.xhtml')"><i class="fa fa-linux fa-2x" aria-hidden="true"></i></a></li>
                 </ul>
+
+
+                 <ul class="nav navbar-nav navbar-right">
+                 <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('call.xhtml')"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('sms.xhtml')"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"> <span id="sms_bange" class="badge"></span></i></a></li>
+                 <li><a href="javascript:click('volumes.xhtml')"><i class="fa fa-wifi fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('info.xhtml')"><i class="fa fa-bluetooth fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('console.xhtml')"><i class="fa fa-battery-full fa-2x" aria-hidden="true"></i></a></li>
+                </ul>
+
            </div>
+
+
     </div>
 </div>
 

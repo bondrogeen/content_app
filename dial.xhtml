@@ -7,11 +7,8 @@
 <link href="css/font-awesome.css" rel="stylesheet">
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
-
 <script src="js/jquery.min.js"></script>
-
 <script src="js/bootstrap.js"></script>
-
 <script type="text/javascript">
 
     var name;
@@ -22,6 +19,12 @@
 		// Set focus on first text field
 
 
+         $('#myModal').on('hidden.bs.modal', function (event) {
+             console.log("ntcn");
+             $('#message').val("");
+             $('#characterLeft').text('0');
+
+         });
 
         $('#myModal').on('show.bs.modal', function (event) {
 
@@ -50,19 +53,23 @@
                 name = row.getElementsByTagName("td").item(1).innerHTML
                 phone = row.getElementsByTagName("td").item(2).innerHTML
 
-                $('#name').text(name);
+                $('#name').text(name + "   " + phone );
                 console.log( name + ":" + phone);
             }
         });
+
+
+
 
         $('#characterLeft').text('0');
         $('#message').keyup(function () {
 
             var len = $(this).val().length;
-                var ch = len;
-                $('#characterLeft').text(ch + '');
-                $('#btnSubmit').removeClass('disabled');
-                $('#characterLeft').removeClass('red');
+            var ch = len;
+            if(len>=1){
+                $('#characterLeft').css( "color", "black" );
+            }
+            $('#characterLeft').text(ch);
 
             });
 
@@ -73,18 +80,27 @@
     function post(val){
 
         console.log(val);
-
-
         if(val=="call"){
             $('#btn_call').text("Соединение...");
         }else if(val=="endсall"){
-            $('#btn_call').text("Звонок");
+            $('#btn_call').text("Позвонить");
             $('#message').val("");
+            $('#characterLeft').text('0');
         }else if(val=="sms"){
-             text = $('#message').val();
-            $('#btnSubmit').text("Отправка...");
-        }
+            text = $('#message').val();
+            if(text.length==0){
+                console.log(text.length);
+                $('#icon').removeClass('fa-spin');
+                $('#characterLeft').css( "color", "red" );
+                $('#characterLeft').text('Ведите текст сообщения');
+                return;
+            }else{
+                $('#icon').addClass('fa-spin');
+            }
 
+
+
+        }
         $.post( "set.xhtml", { send: val, number: phone,text: text }).done(function( data ) {
             //console.log(JSON.parse(data));
             try {
@@ -96,8 +112,8 @@
                 }
 
                 if(data.sms=="true"){
-                    $('#btnSubmit').text("Отправить");
-                    $('#characterLeft').text("0");
+                    $('#icon').removeClass('fa-spin');
+                    $('#characterLeft').text("Сообщение отправлено...");
                     $('#message').val("");
 
                 }else if(data.sms=="false"){
@@ -184,12 +200,19 @@ Cursor cursor = contentResolver.query(CONTENT_URI, null,null, null, null);
          int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
          //Получаем имя:
          if (hasPhoneNumber > 0) {
-             output.append("\n Имя: " + name);
+
              Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null,Phone_CONTACT_ID + " = ?", new String[] { contact_id }, null);
              //и соответствующий ему номер:
              while (phoneCursor.moveToNext()) {
-                 phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-                 output.append("\n Телефон: " + phoneNumber);
+
+                 try {
+                     phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
+                } catch (exception) {
+                     print(phoneNumber);
+                }
+
+
+
                  }
              }
          print("<tr class='click' data-toggle='modal' data-target='#myModal' ><td class='numb'>" + ++position + "&nbsp;<i class='fa fa-address-book' aria-hidden='true'></i></td><td class='call_name' >"+name+"</td><td class='call_phone'>"+phoneNumber+"</td></tr>");
@@ -208,17 +231,21 @@ Cursor cursor = contentResolver.query(CONTENT_URI, null,null, null, null);
 <div id="myModal" class="modal fade">
 <div class="modal-dialog">
 <div class="modal-content">
-<div class="modal-header"><button class="close" type="button" data-dismiss="modal">×</button>
+<div class="modal-header" ><button class="close" type="button" data-dismiss="modal"><span class="glyphicon glyphicon-remove" style="color:#ff0000;"></span></button>
 <h4 class="modal-title" id="name">Имя</h4></div>
 <div class="modal-body">
 <label id="messageLabel" for="message">Сообщение </label>
-<textarea class="form-control input-sm " type="textarea" id="message" placeholder="Текст сообщения" maxlength="140" rows="7"></textarea>
-<span class="help-block"><p id="characterLeft" class="help-block "></p></span>
-<button onclick="post('sms')" class="form-control input-sm btn btn-info disabled" id="btnSubmit" name="btnSubmit" type="button" > Отправить</button>
+<textarea class="form-control input-sm " type="textarea" id="message" style="font-size: 18px;" placeholder="Текст сообщения" maxlength="140" rows="5"></textarea>
+<span class="help-block"><p id="characterLeft" style="text-indent: 1em;" ></p></span>
 </div>
 <div class="modal-footer">
-<button id="btn_call" onclick="post('call')" type="button" class="btn btn-success btn-lg btn-block">Звонок</button>
-<button onclick="post('endсall')" type="button" class="btn btn-danger btn-lg btn-block">Отбой</button>
+<div class="btn_line">
+<button onclick="post('sms')"  id="btnSubmit" class="btn_sms"name="btnSubmit" type="button" > <i id="icon"class="fa fa-envelope" aria-hidden="true"></i></button>
+<button id="btn_call" onclick="post('call')"  class="green" type="button" >Позвонить</button>
+<button onclick="post('endсall')" type="button"  class="red" >Отбой</button>
+</div>
+
+
 </div>
 </div>
 </div>
