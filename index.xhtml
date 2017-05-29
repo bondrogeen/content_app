@@ -33,10 +33,8 @@ serverPut("pawVersion", pawVersion);
         $("#contentDiv").css("overflow-y", "scroll");
 
         get_info();
-
-
-
-
+        get_sms();
+        get_call();
 
 
     });
@@ -45,7 +43,7 @@ serverPut("pawVersion", pawVersion);
 
     function get_info(){
 
-        get_data("get.xhtml",function(res){
+        get_data("get.xhtml", { send: "info" }, function(res){
             console.log(res.battery.level);
             console.log(res.info.new_message);
             console.log(res.info.call_missed);
@@ -68,43 +66,90 @@ serverPut("pawVersion", pawVersion);
                     $('#battery_icon').addClass('fa-battery-empty');
                 }
 
-             //$('#sms_bange').text(res.new_sms);
-
             }
 
             $("#bat").tooltip({
                 html : 'true',
                 title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br><i class="fa fa-battery-full" aria-hidden="true"></i> : '+res.battery.level+'% <br> <i class="fa fa-thermometer-full" aria-hidden="true"></i> : ' + res.battery.temperature/10+'°c<br><i class="fa fa-bolt" aria-hidden="true"></i> : '+ res.battery.voltage/1000+'v</p>',
                 placement: 'bottom',
-                delay: { show: 500, hide: 1000 }
+                delay: { show: 500, hide: 2000 }
             });
 
             $('#bat').on('show.bs.tooltip', function () {
                 $("#wifi").tooltip('hide');
-            })
-
-            $('#wifi').on('show.bs.tooltip', function () {
-                $("#bat").tooltip('hide');
+                $("#sms").tooltip('hide');
+                $("#call").tooltip('hide');
             })
 
 
             $("#wifi").tooltip({
                 html : 'true',
-                title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br><i class="fa fa-battery-full" aria-hidden="true"></i> : '+res.battery.level+'% <br> <i class="fa fa-thermometer-full" aria-hidden="true"></i> : ' + res.battery.temperature/10+'°c<br><i class="fa fa-bolt" aria-hidden="true"></i> : '+ res.battery.voltage/1000+'v</p>',
+                title : '<p style=\'font-size:18px;text-align: justify\' >____________________ <br>SSID : '+res.wifi.ssid+'<br> IP : ' + res.wifi.ip+'<br><i class="fa fa-wifi" aria-hidden="true"></i> : '+res.wifi.strengthpercent+'</p>',
                 placement: 'bottom',
-                delay: { show: 500, hide: 1000 }
+                delay: { show: 500, hide: 2000 }
             });
 
+            $('#wifi').on('show.bs.tooltip', function () {
+                $("#bat").tooltip('hide');
+                $("#sms").tooltip('hide');
+                $("#call").tooltip('hide');
+            })
 
 
         });
+
+    }
+
+
+    function get_sms(){
+
+        get_data("sms.xhtml",{ send: "info" }, function(res){
+            console.log(res);
+
+            $("#sms").tooltip({
+                html : 'true',
+                title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br> <i class="fa fa-envelope-open-o" aria-hidden="true"></i> : '+res.all+'<br> <i class="fa fa-level-down" aria-hidden="true"></i> : ' + res.incoming+'<br><i class="fa fa-level-up" aria-hidden="true"></i> : '+ res.outgoing+'<br><i class="fa fa-envelope-o" aria-hidden="true"> : '+ res.new_sms+'<br><i class="fa fa-pencil" aria-hidden="true"></i> : '+ res.draft+'<br><i class="fa fa-ban" aria-hidden="true"></i> : '+ res.error+'</p>',
+                placement: 'bottom',
+                delay: { show: 500, hide: 2000 }
+            });
+
+            $('#sms').on('show.bs.tooltip', function () {
+                $("#wifi").tooltip('hide');
+                $("#bat").tooltip('hide');
+                $("#call").tooltip('hide');
+            })
+
+        })
+    }
+
+
+    function get_call(){
+
+        get_data("call.xhtml",{ send: "info" }, function(res){
+            console.log(res);
+
+            $("#call").tooltip({
+                trigger : 'hover',
+                html : 'true',
+                title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br> <i class="fa fa-phone" aria-hidden="true"> : '+res.all+'<br> <i class="fa fa-level-down" aria-hidden="true"></i> : ' + res.incoming+'<br><i class="fa fa-level-up" aria-hidden="true"></i> : '+ res.outgoing+'<br><i class="fa fa-phone " aria-hidden="true"  style="transform: rotate(135deg);"></i> : '+ res.unread+'<br><i class="fa fa-times-circle" aria-hidden="true"></i> : '+ res.missed+'</p>',
+                placement: 'bottom',
+                delay: { show: 500, hide: 2000 }
+            });
+
+            $('#call').on('show.bs.tooltip', function () {
+                $("#wifi").tooltip('hide');
+                $("#bat").tooltip('hide');
+                $("#sms").tooltip('hide');
+            })
+
+        })
     }
 
 
 
-    function get_data(html, callback ){
+    function get_data(html, post_data, callback ){
         var res;
-        $.post( html, { send: "info" }).done(function( data ) {
+        $.post( html, post_data ).done(function( data ) {
             //console.log(data);
             try {
                 res = JSON.parse(data);
@@ -125,7 +170,9 @@ serverPut("pawVersion", pawVersion);
 
 
     function click(iframe_link){
+        get_sms();
         get_info();
+        get_call();
         console.log(iframe_link);
         document.all['iframe'].src=iframe_link;
 
@@ -154,8 +201,8 @@ serverPut("pawVersion", pawVersion);
 
                <ul class="nav navbar-nav ">
                  <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('call.xhtml')"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('sms.xhtml')"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"> <span id="sms_bange" class="badge"></span></i></a></li>
+                 <li><a href="javascript:click('call.xhtml')" id="call" ><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('sms.xhtml')" id="sms"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"> <span id="sms_bange" class="badge"></span></i></a></li>
                  <li><a href="javascript:click('volumes.xhtml')"><i class="fa fa-music fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('info.xhtml')"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('console.xhtml')"><i class="fa fa-linux fa-2x" aria-hidden="true"></i></a></li>
@@ -166,8 +213,8 @@ serverPut("pawVersion", pawVersion);
                 <li><a href="#" ></a></li>
                 <li><a href="#"></a></li>
                 <li><a href="#"></a></li>
-                <li><a href="#"><i class="fa fa-wifi fa-2x" aria-hidden="true"></i></a></li>
-                <li><a href="#" id="wifi"><i class="fa fa-bluetooth fa-2x" aria-hidden="true"></i></a></li>
+                <li><a href="#" id="wifi"><i class="fa fa-wifi fa-2x" aria-hidden="true"></i></a></li>
+                <li><a href="#" ><i class="fa fa-bluetooth fa-2x" aria-hidden="true"></i></a></li>
                 <li><a href="#" id="bat">
                 <span class="fa-stack ">
                 <i id ="battery_icon" class="fa fa-battery-full fa-stack-1x fa-2x" aria-hidden="true"></i>
