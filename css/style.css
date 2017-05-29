@@ -243,7 +243,7 @@ tr:hover {
     outline: none;
     border: 2px solid #000 ;
     border-radius: 5px;
-    box-shadow: 0 0 1em #555;
+    box-shadow: 0 0 1em #888;
     background: linear-gradient(#000, #333 48%, #222 52%, #555);
 }
 
@@ -276,7 +276,7 @@ tr:hover {
     outline: none;
     border: 2px solid #000 ;
     border-radius: 5px;
-    box-shadow: 0 0 1em #555;
+    box-shadow: 0 0 1em #888;
     background: linear-gradient(#000, #333 48%, #222 52%, #555);
 }
 
@@ -305,22 +305,22 @@ tr:hover {
     text-align: center;
     text-decoration: none;
 
-    color: #9999ff;
+    color: #00BFFF;
     outline: none;
     border: 2px solid #000 ;
     border-radius: 5px;
-    box-shadow: 0 0 1em #555;
+    box-shadow: 0 0 1em #888;
     background: linear-gradient(#000, #333 48%, #222 52%, #555);
 }
 
 .btn_sms:active {
     top: .05em;
      box-shadow: 0 0 0 #555;
-    color: #0000cc;
+    color: #87CEFA;
 }
 
 .btn_sms:hover {
-
+background: linear-gradient(#000, #333 48%, #222 52%, #555);
 }
 
 .btn_line {
@@ -362,3 +362,15 @@ h1 {
 .comm span{color:orange;font-weight:normal}/* Всё внутри комментария — комментарий */
 
 
+
+.text_span {
+    color: #fff;
+    padding-top: 1px;
+    padding-left: 3px;
+}
+
+.text_span:hover {
+    color: #000;
+    padding-top: 1px;
+    padding-left: 3px;
+}

@@ -3,7 +3,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/overcast/jquery-ui.css" rel="Stylesheet" />
-
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/font-awesome.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
@@ -26,36 +25,110 @@ serverPut("pawVersion", pawVersion);
 <script src="js/bootstrap.js"></script>
 
 <script type="text/javascript">
-	var menuHidden = false;
+	var info = false;
+
+
 	$(document).ready(function() {
         $("#contentDiv").css("height", ($(window).height() * 0.9) + "px");
         $("#contentDiv").css("overflow-y", "scroll");
 
-        console.log("test");
+        get_info();
 
-        $.post( "sms.xhtml", { send: "info" }).done(function( data ) {
-            console.log(data);
 
-            try {
-                data = JSON.parse(data);
-                console.log(data.new_sms);
-                if(data.new_sms>0){
-                    $('#sms_bange').text(data.new_sms);
-                }else{
 
+
+
+
+    });
+
+
+
+    function get_info(){
+
+        get_data("get.xhtml",function(res){
+            console.log(res.battery.level);
+            console.log(res.info.new_message);
+            console.log(res.info.call_missed);
+
+            if(res){
+                if(res.info.new_message>0){
+                   $('#sms_bange').text(res.info.new_message);
+                }
+                $('#battery_icon').removeClass();
+                $('#battery_icon').addClass('fa fa-stack-1x fa-2x');
+                if(res.battery.level>=80){
+                    $('#battery_icon').addClass('fa-battery-full');
+                }else if (res.battery.level>=60){
+                    $('#battery_icon').addClass('fa-battery-three-quarters');
+                }else if (res.battery.level>=40){
+                    $('#battery_icon').addClass('fa-battery-half');
+                }else if (res.battery.level>15){
+                    $('#battery_icon').addClass('fa-battery-quarter');
+                }else if (res.battery.level>0){
+                    $('#battery_icon').addClass('fa-battery-empty');
                 }
 
-            } catch (exception) {
+             //$('#sms_bange').text(res.new_sms);
 
             }
-        });
 
-	});
+            $("#bat").tooltip({
+                html : 'true',
+                title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br><i class="fa fa-battery-full" aria-hidden="true"></i> : '+res.battery.level+'% <br> <i class="fa fa-thermometer-full" aria-hidden="true"></i> : ' + res.battery.temperature/10+'°c<br><i class="fa fa-bolt" aria-hidden="true"></i> : '+ res.battery.voltage/1000+'v</p>',
+                placement: 'bottom',
+                delay: { show: 500, hide: 1000 }
+            });
+
+            $('#bat').on('show.bs.tooltip', function () {
+                $("#wifi").tooltip('hide');
+            })
+
+            $('#wifi').on('show.bs.tooltip', function () {
+                $("#bat").tooltip('hide');
+            })
+
+
+            $("#wifi").tooltip({
+                html : 'true',
+                title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br><i class="fa fa-battery-full" aria-hidden="true"></i> : '+res.battery.level+'% <br> <i class="fa fa-thermometer-full" aria-hidden="true"></i> : ' + res.battery.temperature/10+'°c<br><i class="fa fa-bolt" aria-hidden="true"></i> : '+ res.battery.voltage/1000+'v</p>',
+                placement: 'bottom',
+                delay: { show: 500, hide: 1000 }
+            });
+
+
+
+        });
+    }
+
+
+
+    function get_data(html, callback ){
+        var res;
+        $.post( html, { send: "info" }).done(function( data ) {
+            //console.log(data);
+            try {
+                res = JSON.parse(data);
+                info = res;
+                } catch (exception) {
+                    res = false;
+                    }
+            callback(res);
+        });
+    }
+
+
+
+
+
+
+
+
 
     function click(iframe_link){
+        get_info();
         console.log(iframe_link);
-        //dial.xhtml
         document.all['iframe'].src=iframe_link;
+
 
     }
 
@@ -89,18 +162,19 @@ serverPut("pawVersion", pawVersion);
                 </ul>
 
 
-                 <ul class="nav navbar-nav navbar-right">
-                 <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('call.xhtml')"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('sms.xhtml')"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"> <span id="sms_bange" class="badge"></span></i></a></li>
-                 <li><a href="javascript:click('volumes.xhtml')"><i class="fa fa-wifi fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('info.xhtml')"><i class="fa fa-bluetooth fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('console.xhtml')"><i class="fa fa-battery-full fa-2x" aria-hidden="true"></i></a></li>
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" ></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"><i class="fa fa-wifi fa-2x" aria-hidden="true"></i></a></li>
+                <li><a href="#" id="wifi"><i class="fa fa-bluetooth fa-2x" aria-hidden="true"></i></a></li>
+                <li><a href="#" id="bat">
+                <span class="fa-stack ">
+                <i id ="battery_icon" class="fa fa-battery-full fa-stack-1x fa-2x" aria-hidden="true"></i>
+                <span id="battery"class="fa-stack-2x text_span " style="font-size: 13px;"></span>
+                </span></a></li>
                 </ul>
-
            </div>
-
-
     </div>
 </div>
 

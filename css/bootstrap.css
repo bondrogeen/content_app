@@ -4112,6 +4112,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .nav-justified > li {
   float: none;
+
 }
 .nav-justified > li > a {
   margin-bottom: 5px;
@@ -5911,7 +5912,7 @@ button.close {
   background-color: #fff;
   -webkit-background-clip: padding-box;
           background-clip: padding-box;
-  border: 1px solid #999;
+  border: 1px solid #333;
   border: 1px solid rgba(0, 0, 0, .2);
   border-radius: 6px;
   outline: 0;
