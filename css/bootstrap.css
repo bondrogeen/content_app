@@ -11,6 +11,7 @@ html {
 }
 body {
   margin: 0;
+
 }
 article,
 aside,
@@ -241,6 +242,8 @@ th {
   }
   .navbar {
     display: none;
+
+
   }
   .btn > .caret,
   .dropup > .btn > .caret {
@@ -251,6 +254,8 @@ th {
   }
   .table {
     border-collapse: collapse !important;
+
+
   }
   .table td,
   .table th {
@@ -4168,7 +4173,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar {
   position: relative;
   min-height: 50px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   border: 1px solid transparent;
 }
 @media (min-width: 768px) {
@@ -4244,7 +4249,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-static-top {
   z-index: 1000;
-  border-width: 0 0 1px;
+  border-width: 0 0 0px;
 }
 @media (min-width: 768px) {
   .navbar-static-top {
@@ -5900,7 +5905,7 @@ button.close {
 }
 .modal-open .modal {
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 .modal-dialog {
   position: relative;

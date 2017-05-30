@@ -5,58 +5,66 @@
 <title>infosetting</title>
 
 <link href="css/style.css" rel="stylesheet">
-<link href="css/bootstrap.css" rel="stylesheet">
+
 <link href="css/font-awesome.css" rel="stylesheet">
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/jquery-ui.js"></script>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="js/bootstrap.js"></script>
 
+<style type="text/css">
+	* {margin:0; padding:0;}
+	#container {width:50%; margin: 0 auto; position: relative; background-color: #eee;}
+	#head {height: 100px; position: fixed; width: 50%; background-color: #fcc;}
+	#left {position: fixed; top: 100px; width: 150px; background-color: #ccc;}
+	#right {position: fixed; top: 100px; right: 25%; width: 150px; background-color: #ccc;}
+	#center {padding: 100px 150px 0 150px;}
+  </style>
+
+
 </head>
 <body>
 
 
-<div class="modal-dialog">
-<div class="modal-content">
-<div class="modal-header"><button class="close" type="button" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
-<h4 class="modal-title" id="name">Имя</h4></div>
-<div class="modal-body">
-<label id="messageLabel" for="message">Сообщение </label>
-<textarea class="form-control input-sm " type="textarea" id="message" placeholder="Текст сообщения" maxlength="140" rows="7"></textarea>
-<span class="help-block"><p id="characterLeft" class="help-block "></p></span>
-
-</div>
-<div class="modal-footer">
 
 
 
 
-<div class="btn_line">
-<button onclick="post('sms')"  id="btnSubmit" class="btn_sms"name="btnSubmit" type="button" > <span class="glyphicon glyphicon-envelope"></button>
-<button id="btn_call" onclick="post('call')"  class="green" type="button" > Позвонить</button>
-<button onclick="post('endсall')" type="button"  class="red" >Отбой</button>
-</div>
-
-<span class="fa-stack fa-lg">
- <i class="fa fa-battery-full fa-stack-1x fa-2x" aria-hidden="true"></i>
- <span class="fa-stack-2x text_span " style="transform: rotate(-45deg);">98</span>
- </span>
-
-
-<ul class="list-group">
-  <li class="list-group-item ">1</li>
-  <li class="list-group-item ">2</li>
-  <li class="list-group-item ">3</li>
-  <li class="list-group-item ">4</li>
-</ul>
 
 
 
-</div>
-</div>
-</div>
 
-</body>
+	<div id="container">
+	  <div id="head"><p>В ворота гостиницы губернского города NN въехала</p></div>
+	  <div id="left"><p>В ворота гостиницы губернского города NN въехала довольно
+	  красивая рессорная небольшая бричка, в какой ездят холостяки: отставные
+	  подполковники, штабс-капитаны, помещики, имеющие около сотни душ крестьян, -
+	  словом, все те, которых называют господами средней руки.</p></div>
+	  <div id="right"><p>В ворота гостиницы губернского города NN въехала довольно
+	  красивая рессорная небольшая бричка, в какой ездят холостяки: отставные
+	  подполковники, штабс-капитаны, помещики, имеющие около сотни душ крестьян, -
+	  словом, все те, которых называют господами средней руки.</p></div>
+	  <div id="center"><p>В ворота гостиницы губернского города NN въехала довольно
+	  красивая рессорная небольшая бричка, в какой ездят холостяки: отставные
+	  подполковники, штабс-капитаны, помещики, имеющие около сотни душ крестьян, -
+	  словом, все те, которых называют господами средней руки. В бричке сидел
+	  господин, не красавец, но и не дурной наружности, ни слишком толст, ни
+	  слишком тонок; нельзя сказать, чтобы стар, однако ж и не так, чтобы слишком
+	  молод. Въезд его не произвел в городе совершенно никакого шума и не был
+	  сопровожден ничем особенным; только два русские мужика, стоявшие у дверей
+	  кабака против гостиницы, сделали кое-какие замечания, относившиеся, впрочем,
+	  более к экипажу, чем к сидевшему в нем. "Вишь ты, - сказал один другому, -
+	  вон какое колесо! что ты думаешь, доедет то колесо, если б случилось, в
+	  Москву или не доедет?" - "Доедет", - отвечал другой. "А в Казань-то, я думаю,
+	  не доедет?" - "В Казань не доедет", - отвечал другой. Этим разговор и
+	  кончился Да еще, когда бричка подъехала к гостинице, встретился молодой
+	  человек в белых канифасовых панталонах, весьма узких и коротких, во фраке с
+	  покушеньями на моду, из-под которого видна была манишка, застегнутая
+	  тульскою булавкою с бронзовым пистолетом. Молодой человек оборотился назад,
+	  посмотрел экипаж, придержал рукою картуз, чуть не слетевший от ветра, и
+	  пошел своей дорогой.</p></div>
+	</div>
+  </body>
 </html>
 
 

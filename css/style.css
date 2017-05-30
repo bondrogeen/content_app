@@ -217,7 +217,8 @@ tr:hover {
 
 .iframe {
     width: 100%;
-    border: none;
+    border: 0px;
+
 }
 
 
@@ -374,3 +375,17 @@ h1 {
     padding-top: 1px;
     padding-left: 3px;
 }
+
+
+
+.fixed {
+
+position: relative;
+  top: expression(this.parentElement.parentElement.parentElement.scrollTop);
+}
+
+
+
+
+
+

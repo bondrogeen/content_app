@@ -134,7 +134,35 @@
 
 </script>
 </head>
-<body>
+<body style="overflow-y: scroll;">
+
+
+<div class="navbar  navbar-inverse navbar-fixed-top" >
+    <div >
+         <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+         <span class="sr-only">Открыть</span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         </button>
+        </div>
+
+           <div class="collapse navbar-collapse " id="menu">
+
+               <ul class="nav navbar-nav ">
+                 <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-plus fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('call.xhtml')" ><i class="fa fa-th fa-2x" aria-hidden="true"></i></a></li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a></li>
+                </ul>
+           </div>
+    </div>
+</div>
+
+
 
 <bsh>
 import android.app.Service;
@@ -159,7 +187,8 @@ if(action != null) {
 }
 </bsh>
 
-<table class="table">
+<table class="table " style="margin-top: 58px;" >
+
 <tr class="first"><th class="numb">#</th><th class="call_name">Имя</th><th class="call_phone">Номер</th></tr>
 
 <bsh>
@@ -199,21 +228,32 @@ Cursor cursor = contentResolver.query(CONTENT_URI, null,null, null, null);
          String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
          int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
          //Получаем имя:
+
          if (hasPhoneNumber > 0) {
 
              Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null,Phone_CONTACT_ID + " = ?", new String[] { contact_id }, null);
              //и соответствующий ему номер:
-             while (phoneCursor.moveToNext()) {
+             if(phoneCursor!=null){
+
+
+                 while (phoneCursor.moveToNext()) {
 
                  try {
+
                      phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
                 } catch (exception) {
                      print(phoneNumber);
+                     phoneNumber="nnn";
                 }
 
-
-
                  }
+
+
+             }else{
+                 phoneNumber = "null";
+
+             }
+
              }
          print("<tr class='click' data-toggle='modal' data-target='#myModal' ><td class='numb'>" + ++position + "&nbsp;<i class='fa fa-address-book' aria-hidden='true'></i></td><td class='call_name' >"+name+"</td><td class='call_phone'>"+phoneNumber+"</td></tr>");
 
