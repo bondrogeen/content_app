@@ -36,8 +36,15 @@ serverPut("pawVersion", pawVersion);
         get_sms();
         get_call();
 
+        $('iframe').on('load', function(){
+            console.log("res.info.call_missed");
+            $('#processing-modal').modal('hide');
+        });
+
 
     });
+
+
 
 
 
@@ -183,6 +190,7 @@ serverPut("pawVersion", pawVersion);
 
 
     function click(iframe_link){
+        $('#processing-modal').modal('show');
         get_sms();
         get_info();
         get_call();
@@ -239,8 +247,23 @@ serverPut("pawVersion", pawVersion);
 </div>
 
 
-
 <iframe class="iframe" name="iframe" id="contentDiv" width: 100% src="start.xhtml" ></iframe>
+
+
+
+<div class="modal modal-static fade" id="processing-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="http://www.travislayne.com/images/loading.gif" class="icon" />
+                    <h4>Processing... <button type="button" class="close" style="float: none;" data-dismiss="modal" aria-hidden="true">×</button></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 

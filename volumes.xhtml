@@ -7,7 +7,7 @@
 
 <link type="text/css" href="css/overcast/jquery-ui.css" rel="Stylesheet" />
 <link href="css/font-awesome.css" rel="stylesheet">
-
+<link href="css/bootstrap.css" rel="stylesheet">
 
 
 <script type="text/javascript" src="js/jquery.js"></script>
@@ -66,10 +66,49 @@ volTable.put("STREAM_VOICE_CALL", translateRaw("volumes.label.call") + ":" + tra
 </script>
 </head>
 
-<body>
+<body style="overflow-y: scroll;">
 
-<center>
-<table>
+
+<div class="navbar  navbar-inverse navbar-fixed-top" >
+    <div >
+         <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+         <span class="sr-only">Открыть</span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         </button>
+        </div>
+
+           <div class="collapse navbar-collapse " id="menu">
+
+               <ul class="nav navbar-nav ">
+                     <li><a href="#" ><i class="fa fa-2x fa-fast-backward" aria-hidden="true"></i></a></li>
+                     <li><a href="#" ><i class="fa fa-2x fa-backward" aria-hidden="true"></i></a></li>
+                     <li><a href="#" ><i class="fa fa-2x fa-stop" aria-hidden="true"></i></a></li>
+                     <li><a href="#" ><i class="fa fa-2x fa-play" aria-hidden="true"></i></a></li>
+                     <li><a href="#" ><i class="fa fa-2x fa-pause" aria-hidden="true"></i></a></li>
+                     <li><a href="#" ><i class="fa fa-2x fa-forward" aria-hidden="true"></i></a></li>
+                     <li><a href="#" ><i class="fa fa-2x fa-fast-forward" aria-hidden="true"></i></a></li>
+
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a></li>
+                <li><a href="javascript:click('sms.xhtml')" ><i class="icon-white icon-fast-forward"></i></a></li>
+                </ul>
+           </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<center >
+<table style="margin-top: 158px;">
 <bsh>
 keys = volTable.keys();
 while(keys.hasMoreElements()) {
@@ -88,7 +127,7 @@ while(keys.hasMoreElements()) {
 }
 </bsh>
 </table>
-</p>
+
 
 
 <p>&nbsp;</p>
