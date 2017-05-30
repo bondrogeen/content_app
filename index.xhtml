@@ -43,12 +43,16 @@ serverPut("pawVersion", pawVersion);
 
     function get_info(){
 
+        $("#bat").tooltip('destroy');
+        $("#wifi").tooltip('destroy');
+
         get_data("get.xhtml", { send: "info" }, function(res){
             console.log(res.battery.level);
             console.log(res.info.new_message);
             console.log(res.info.call_missed);
 
             if(res){
+
                 if(res.info.new_message>0){
                    $('#sms_bange').text(res.info.new_message);
                 }
@@ -103,8 +107,13 @@ serverPut("pawVersion", pawVersion);
 
     function get_sms(){
 
+         $("#sms").tooltip('destroy');
+
+
         get_data("sms.xhtml",{ send: "info" }, function(res){
             console.log(res);
+
+
 
             $("#sms").tooltip({
                 html : 'true',
@@ -125,8 +134,12 @@ serverPut("pawVersion", pawVersion);
 
     function get_call(){
 
+        $("#call").tooltip('destroy');
+
         get_data("call.xhtml",{ send: "info" }, function(res){
             console.log(res);
+
+
 
             $("#call").tooltip({
                 trigger : 'hover',
@@ -194,7 +207,7 @@ serverPut("pawVersion", pawVersion);
          <span class="icon-bar"></span>
          <span class="icon-bar"></span>
          </button>
-         <a href="start.xhtml" target="content" class="navbar-brand"><i class="fa fa-power-off" aria-hidden="true"></i> ioBroker.paw</a>
+         <a href="javascript:click('start.xhtml')" class="navbar-brand"><i class="fa fa-power-off" aria-hidden="true"></i> ioBroker.paw</a>
 
         </div>
            <div class="collapse navbar-collapse " id="menu">
