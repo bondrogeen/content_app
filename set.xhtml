@@ -156,6 +156,52 @@ switch (send) {
 				jsonVar.put("lcd_on", "true");
 			break;
 
+
+            case "new_contact":
+                if (number != null&&text != null) {
+                    import android.provider.ContactsContract;
+                    import java.util.*;
+                    import android.provider.ContactsContract.RawContacts;
+                    import android.content.ContentProviderOperation;
+                    import  android.provider.ContactsContract.Data;
+                    import   android.provider.ContactsContract.CommonDataKinds.StructuredName;
+                    import   android.provider.ContactsContract.CommonDataKinds.Phone;
+                    service = server.props.get("serviceContext");
+                    op = new ArrayList<ContentProviderOperation>();
+                    /* Добавляем пустой контакт */
+                    op.add(ContentProviderOperation.newInsert(RawContacts.CONTENT_URI)
+                           .withValue(RawContacts.ACCOUNT_TYPE, null)
+                           .withValue(RawContacts.ACCOUNT_NAME, null)
+                           .build());
+                            /* Добавляем данные имени */
+                    op.add(ContentProviderOperation.newInsert(Data.CONTENT_URI)
+                           .withValueBackReference(Data.RAW_CONTACT_ID, 0)
+                           .withValue(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE)
+                           .withValue(StructuredName.DISPLAY_NAME, text)
+                           .build());
+                            /* Добавляем данные телефона */
+                    op.add(ContentProviderOperation.newInsert(Data.CONTENT_URI)
+                           .withValueBackReference(Data.RAW_CONTACT_ID, 0)
+                           .withValue(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE)
+                           .withValue(Phone.NUMBER, number)
+                           .withValue(Phone.TYPE, Phone.TYPE_MOBILE)
+                           .build());
+                        try {
+                            service.getContentResolver().applyBatch(ContactsContract.AUTHORITY, op);
+                            jsonVar.put("new_contact", "true");
+                        } catch (Exception e) {
+                            jsonVar.put("new_contact", "false");
+                            jsonVar.put("error", e);
+                            }
+                    }else{
+                    jsonVar.put("new_contact", "false");
+                }
+
+            break;
+
+
+
+
 			case "gong":
 				import java.io.File;
 			    import android.media.AudioManager;
