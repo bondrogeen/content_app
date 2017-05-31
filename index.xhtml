@@ -102,8 +102,7 @@ serverPut("pawVersion", pawVersion);
 
             $('#bat').on('show.bs.tooltip', function () {
                 $("#wifi").tooltip('hide');
-                $("#sms").tooltip('hide');
-                $("#call").tooltip('hide');
+
             })
 
 
@@ -116,8 +115,7 @@ serverPut("pawVersion", pawVersion);
 
             $('#wifi').on('show.bs.tooltip', function () {
                 $("#bat").tooltip('hide');
-                $("#sms").tooltip('hide');
-                $("#call").tooltip('hide');
+
             })
 
 
@@ -128,9 +126,6 @@ serverPut("pawVersion", pawVersion);
 
     function get_sms (){
 
-         $("#sms").tooltip('destroy');
-
-
         get_data("sms.xhtml",{ send: "info" }, function(res){
             console.log(res);
 
@@ -138,21 +133,6 @@ serverPut("pawVersion", pawVersion);
 
                 var Obj = JSON.stringify(res);
                 sessionStorage.setItem('sms_info', Obj);
-
-
-                $("#sms").tooltip({
-                    html : 'true',
-                    title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br> <i class="fa fa-envelope-open-o" aria-hidden="true"></i> : '+res.all+'<br> <i class="fa fa-level-down" aria-hidden="true"></i> : ' + res.incoming+'<br><i class="fa fa-level-up" aria-hidden="true"></i> : '+ res.outgoing+'<br><i class="fa fa-envelope-o" aria-hidden="true"> : '+ res.new_sms+'<br><i class="fa fa-pencil" aria-hidden="true"></i> : '+ res.draft+'<br><i class="fa fa-ban" aria-hidden="true"></i> : '+ res.error+'</p>',
-                    placement: 'bottom',
-                    delay: { show: 500, hide: 2000 }
-                });
-
-                $('#sms').on('show.bs.tooltip', function () {
-                    $("#wifi").tooltip('hide');
-                    $("#bat").tooltip('hide');
-                    $("#call").tooltip('hide');
-                })
-
 
 
             }
@@ -163,8 +143,6 @@ serverPut("pawVersion", pawVersion);
 
     function get_call(){
 
-        $("#call").tooltip('destroy');
-
         get_data("call.xhtml",{ send: "info" }, function(res){
             console.log(res);
 
@@ -174,28 +152,8 @@ serverPut("pawVersion", pawVersion);
                 var Obj = JSON.stringify(res);
                 sessionStorage.setItem('call_info', Obj);
 
-                $("#call").tooltip({
-
-                    trigger : 'hover',
-                    html : 'true',
-                    title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br> <i class="fa fa-phone" aria-hidden="true"> : '+res.all+'<br> <i class="fa fa-level-down" aria-hidden="true"></i> : ' + res.incoming+'<br><i class="fa fa-level-up" aria-hidden="true"></i> : '+ res.outgoing+'<br><i class="fa fa-phone " aria-hidden="true"  style="transform: rotate(135deg);"></i> : '+ res.unread+'<br><i class="fa fa-times-circle" aria-hidden="true"></i> : '+ res.missed+'</p>',
-                    placement: 'bottom',
-                    delay: { show: 500, hide: 2000 }
-                });
-
-                $('#call').on('show.bs.tooltip', function () {
-                    $("#wifi").tooltip('hide');
-                    $("#bat").tooltip('hide');
-                    $("#sms").tooltip('hide');
-                })
-
-
 
                }
-
-
-
-
 
         })
     }
@@ -254,7 +212,7 @@ serverPut("pawVersion", pawVersion);
            <div class="collapse navbar-collapse " id="menu">
 
                <ul class="nav navbar-nav ">
-                 <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('index_dial.html')" ><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('index_call.html')" id="call" ><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('index_sms.html')" id="sms"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"> <span id="sms_bange" class="badge"></span></i></a></li>
                  <li><a href="javascript:click('volumes.xhtml')"><i class="fa fa-music fa-2x" aria-hidden="true"></i></a></li>

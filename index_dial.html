@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-   <title>call</title>
+
+<title><bsh>конт</bsh></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
 <link href="css/font-awesome.css" rel="stylesheet">
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
-
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script type="text/javascript">
@@ -18,24 +16,24 @@
     var text;
     var call;
 
-
+console.log(sessionStorage.getItem('dial'));
 
 	$(document).ready(function() {
         console.log("start");
 
-        if(sessionStorage.getItem('call')){
-            console.log(sessionStorage.getItem('call') + "true");
-            call = JSON.parse(sessionStorage.getItem("call"))
+        if(sessionStorage.getItem('dial')){
+            console.log(sessionStorage.getItem('dial') + "true");
+            dial = JSON.parse(sessionStorage.getItem("dial"))
             gen_table();
         }else{
-            console.log("no call");
+            console.log("no dail");
 
-            get_data("call.xhtml",{ send: "all" }, function(res){
+            get_data("dial.xhtml",{ send: "all" }, function(res){
                 console.log(res);
                 if(res){
-                    call = res;
+                    dial = res;
                     var Obj = JSON.stringify(res);
-                    sessionStorage.setItem('call', Obj);
+                    sessionStorage.setItem('dial', Obj);
                     gen_table();
                 }else{
                     return;
@@ -47,14 +45,11 @@
 
 
 
-        if(sessionStorage.getItem('call_info')){
-            console.log(sessionStorage.getItem('call_info') + "true");
-            call_info = JSON.parse(sessionStorage.getItem("call_info"))
-            $('#all_bange').text(call_info.all);
-            $('#incoming_bange').text(call_info.incoming);
-            $('#outgoing_bange').text(call_info.outgoing);
-            $('#unread_bange').text(call_info.unread);
-            $('#missed_bange').text(call_info.missed);
+        if(sessionStorage.getItem('dail_info')){
+            console.log(sessionStorage.getItem('dail_info') + "true");
+            dail_info = JSON.parse(sessionStorage.getItem("dail_info"))
+            $('#all_bange').text(dail_info.all);
+
 
         }
 
@@ -98,9 +93,9 @@
                 id = id.split("&nbsp;");
                 id = id[0];
                 id = id - 1;
-                phone = call[id].number;
-                console.log( call[id].number );
-                $('#name').text(call[id].name + "   " + call[id].number);
+                phone = dial[id].number;
+                console.log( dial[id].number );
+                $('#name').text(dial[id].name + "   " + dial[id].number);
                 //console.log( name + ":" + id);
             }
         });
@@ -179,53 +174,17 @@
 
     function gen_table(){
             var tbl = "<table >";
-            tbl += "<tr class='first'><th class='call_numb'>#</th><th class='call_name'>Имя</th><th class='call_date' >Дата</th><th class='call_time'>Время</th><th class='duration'>Длит.</th></tr>";
+            tbl += "<tr class='first'><th class='numb'>#</th><th class='call_name'>Имя</th><th class='call_phone'>Номер</th></tr>";
             //{"duration":41,"time":"14:55:23","number":"+79614445805","unixtime":1496231723094,"date":"31-05-2017","type":"incoming","name":"Kalek Rabochi"},
 
-            for (var i=0, count=call.length; i<count; i++) {
-
-                var dur_i = call[i].duration ;
-                var Sec = dur_i   % 60;
-                var Min = Math.floor(dur_i / 60);
-                if(Min>0){
-                    if (Sec < 10) {
-                        duration = Min+":0"+Sec;
-                    }else{
-                        duration = Min+":"+Sec;
-                    }
-                }else{
-                    duration = Sec;
-                }
+            for (var i=0, count=dial.length; i<count; i++) {
 
                 var num = i + 1;
-                if(call[i].name=="null"){
-                    name= call[i].number;
-                }else{
-                    name= call[i].name;
-                   }
-
-                switch(call[i].type) {
-					case "incoming":
-						callImage = "<i class='fa fa-arrow-down' aria-hidden='true'></i>";
-						//callTypeLabel = "incoming";
-						break;
-					case "outgoing":
-		 				callImage = "<i class='fa fa-arrow-up' aria-hidden='true'></i>";
-						//callTypeLabel = "outgoing";
-						break;
-					case "missed":
-						callImage = "<i class='fa fa-times' aria-hidden='true'></i>";
-						//callTypeLabel = "missed";
-						break;
-				}
-
 
                 tbl += "<tr class='click' data-toggle='modal' data-target='#myModal' >";
-                tbl += "<td class='call_numb'>" + num +"&nbsp;" + callImage + "</td>";
-                tbl += "<td class='call_name'>" + name + "</td>";
-                tbl += "<td class='call_date'>" + call[i].date + "</td>";
-                tbl += "<td class='call_time'>" + call[i].time + "</td>";
-                tbl += "<td class='duration'>" + duration + "</td>";
+                tbl += "<td class='call_numb'>" + num +"&nbsp;<i class='fa fa-address-book' aria-hidden='true'></td>";
+                tbl += "<td class='call_name'>" + dial[i].name + "</td>";
+                tbl += "<td class='call_phone'>" + dial[i].number + "</td>";
                 tbl += "</tr>";
                 }
             tbl += "</table>";
@@ -250,7 +209,6 @@
 
 </script>
 </head>
-
 <body style="overflow-y: scroll;">
 
 
@@ -265,20 +223,15 @@
          </button>
         </div>
 
-
-
            <div class="collapse navbar-collapse " id="menu">
 
                <ul class="nav navbar-nav ">
+                 <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-plus " aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('call.xhtml')" ><i class="fa fa-th " aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o " aria-hidden="true"></i></a></li>
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><i class="fa fa-phone" aria-hidden="true"> <span id="all_bange" class="badge"></span></i></a></li>
-                <li><a href="#"><i class="fa fa-level-down" aria-hidden="true"> <span id="incoming_bange" class="badge"></span></i></a></li>
-                <li><a href="#"><i class="fa fa-level-up" aria-hidden="true"> <span id="outgoing_bange" class="badge"></span></i></a></li>
-                <li><a href="#"><i class="fa fa-exclamation" aria-hidden="true"><span id="unread_bange" class="badge" ></span></i></a></li>
-                <li><a href="#"><i class="fa fa-times-circle" aria-hidden="true"> <span id="missed_bange" class="badge"></span></i></a></li>
+                <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o " aria-hidden="true"></i></a></li>
                 </ul>
            </div>
     </div>
@@ -289,6 +242,9 @@
 
 
     </table>
+
+
+
 
 <div id="myModal" class="modal fade">
 <div class="modal-dialog">
@@ -310,6 +266,9 @@
 </div>
 </div>
 </div>
+
+
+
 
 
 </body>
