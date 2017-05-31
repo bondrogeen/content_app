@@ -17,7 +17,27 @@
     var phone;
     var text;
 
+
+
 	$(document).ready(function() {
+
+
+        if(sessionStorage.getItem('call_info')){
+            console.log(sessionStorage.getItem('call_info') + " true");
+            var call = JSON.parse(sessionStorage.getItem("call_info"))
+        }else{
+            console.log(sessionStorage.getItem('call_info')+ " false");
+        }
+
+
+        $('#all_bange').text(call.all);
+        $('#incoming_bange').text(call.incoming);
+        $('#outgoing_bange').text(call.outgoing);
+        $('#unread_bange').text(call.unread);
+        $('#missed_bange').text(call.missed);
+
+
+
 
          $('#myModal').on('show.bs.modal', function (event) {
             var target;
@@ -127,15 +147,20 @@
          </button>
         </div>
 
+
+
            <div class="collapse navbar-collapse " id="menu">
 
                <ul class="nav navbar-nav ">
-
-                 <li><a href="javascript:click('call.xhtml')" ><i class="fa fa-th fa-2x" aria-hidden="true"></i></a></li>
-
+                 <li><a href="javascript:click('call.xhtml')" ><i class="fa fa-th " aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o " aria-hidden="true"></i></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a></li>
+                <li><a href="#"><i class="fa fa-phone" aria-hidden="true"> <span id="all_bange" class="badge"></span></i></a></li>
+                <li><a href="#"><i class="fa fa-level-down" aria-hidden="true"> <span id="incoming_bange" class="badge"></span></i></a></li>
+                <li><a href="#"><i class="fa fa-level-up" aria-hidden="true"> <span id="outgoing_bange" class="badge"></span></i></a></li>
+                <li><a href="#"><i class="fa fa-exclamation" aria-hidden="true"><span id="unread_bange" class="badge" ></span></i></a></li>
+                <li><a href="#"><i class="fa fa-times-circle" aria-hidden="true"> <span id="missed_bange" class="badge"></span></i></a></li>
                 </ul>
            </div>
     </div>
@@ -143,7 +168,7 @@
 
 
 
-<table class="table" style="margin-top: 58px;">
+<table class="table" style="margin-top: 48px;">
 <tr class="first"><th class="call_numb">#</th><th class="call_name">Имя</th><th class="call_date" >Дата</th><th class="call_time">Время</th><th class="duration">Длит.</th></tr>
 
 

@@ -1,12 +1,14 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<bsh>source(server.props.get("serviceContext").pawHome + "/html/app/bsh/i18n.bsh");</bsh>
-<title><bsh>translate("dial_number.title");</bsh></title>
+    <meta charset="UTF-8">
+   <title>call</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
 <link href="css/font-awesome.css" rel="stylesheet">
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
+
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script type="text/javascript">
@@ -14,21 +16,58 @@
     var name;
     var phone;
     var text;
+    var call;
+
+
 
 	$(document).ready(function() {
-		// Set focus on first text field
+        console.log("start");
+
+        if(sessionStorage.getItem('call')){
+            console.log(sessionStorage.getItem('call') + "true");
+            call = JSON.parse(sessionStorage.getItem("call"))
+            gen_table();
+        }else{
+            console.log("no call");
+
+            get_data("call.xhtml",{ send: "all" }, function(res){
+                console.log(res);
+                if(res){
+                    call = res;
+                    var Obj = JSON.stringify(res);
+                    sessionStorage.setItem('call', Obj);
+                    gen_table();
+                }else{
+                    return;
+                }
+
+            });
+
+        }
+
+
+
+        if(sessionStorage.getItem('call_info')){
+            console.log(sessionStorage.getItem('call_info') + "true");
+            call_info = JSON.parse(sessionStorage.getItem("call_info"))
+            $('#all_bange').text(call_info.all);
+            $('#incoming_bange').text(call_info.incoming);
+            $('#outgoing_bange').text(call_info.outgoing);
+            $('#unread_bange').text(call_info.unread);
+            $('#missed_bange').text(call_info.missed);
+
+        }
 
 
 
 
+        $('#myModal').on('hidden.bs.modal', function (event) {
 
-
-         $('#myModal').on('hidden.bs.modal', function (event) {
-             console.log("ntcn");
              $('#message').val("");
              $('#characterLeft').text('0');
 
          });
+
 
         $('#myModal').on('show.bs.modal', function (event) {
 
@@ -54,14 +93,17 @@
                 //alert(str);
                 }
 
-                name = row.getElementsByTagName("td").item(1).innerHTML
-                phone = row.getElementsByTagName("td").item(2).innerHTML
-
-                $('#name').text(name + "   " + phone );
-                console.log( name + ":" + phone);
+                name = row.getElementsByTagName("td").item(1).innerHTML;
+                id = row.getElementsByTagName("td").item(0).innerHTML;
+                id = id.split("&nbsp;");
+                id = id[0];
+                id = id - 1;
+                phone = call[id].number;
+                console.log( call[id].number );
+                $('#name').text(call[id].name + "   " + call[id].number);
+                //console.log( name + ":" + id);
             }
         });
-
 
 
 
@@ -135,9 +177,80 @@
     }
 
 
+    function gen_table(){
+            var tbl = "<table >";
+            tbl += "<tr class='first'><th class='call_numb'>#</th><th class='call_name'>Имя</th><th class='call_date' >Дата</th><th class='call_time'>Время</th><th class='duration'>Длит.</th></tr>";
+            //{"duration":41,"time":"14:55:23","number":"+79614445805","unixtime":1496231723094,"date":"31-05-2017","type":"incoming","name":"Kalek Rabochi"},
+
+            for (var i=0, count=call.length; i<count; i++) {
+
+                var dur_i = call[i].duration ;
+                var Sec = dur_i   % 60;
+                var Min = Math.floor(dur_i / 60);
+                if(Min>0){
+                    if (Sec < 10) {
+                        duration = Min+":0"+Sec;
+                    }else{
+                        duration = Min+":"+Sec;
+                    }
+                }else{
+                    duration = Sec;
+                }
+
+                var num = i + 1;
+                if(call[i].name=="null"){
+                    name= call[i].number;
+                }else{
+                    name= call[i].name;
+                   }
+
+                switch(call[i].type) {
+					case "incoming":
+						callImage = "<i class='fa fa-arrow-down' aria-hidden='true'></i>";
+						//callTypeLabel = "incoming";
+						break;
+					case "outgoing":
+		 				callImage = "<i class='fa fa-arrow-up' aria-hidden='true'></i>";
+						//callTypeLabel = "outgoing";
+						break;
+					case "missed":
+						callImage = "<i class='fa fa-times' aria-hidden='true'></i>";
+						//callTypeLabel = "missed";
+						break;
+				}
+
+
+                tbl += "<tr class='click' data-toggle='modal' data-target='#myModal' >";
+                tbl += "<td class='call_numb'>" + num +"&nbsp;" + callImage + "</td>";
+                tbl += "<td class='call_name'>" + name + "</td>";
+                tbl += "<td class='call_date'>" + call[i].date + "</td>";
+                tbl += "<td class='call_time'>" + call[i].time + "</td>";
+                tbl += "<td class='duration'>" + duration + "</td>";
+                tbl += "</tr>";
+                }
+            tbl += "</table>";
+            $("#result").html(tbl);
+
+        }
+
+
+        function get_data(html, post_data, callback ){
+            var res;
+            $.post( html, post_data, function(data) {
+                //console.log(data);
+                if(data){
+                    callback(data);
+                }else{
+                    callback(false);
+                }
+            },"json");
+        }
+
+
 
 </script>
 </head>
+
 <body style="overflow-y: scroll;">
 
 
@@ -152,160 +265,30 @@
          </button>
         </div>
 
+
+
            <div class="collapse navbar-collapse " id="menu">
 
                <ul class="nav navbar-nav ">
-                 <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-plus " aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('call.xhtml')" ><i class="fa fa-th " aria-hidden="true"></i></a></li>
-
+                 <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o " aria-hidden="true"></i></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o " aria-hidden="true"></i></a></li>
+                <li><a href="#"><i class="fa fa-phone" aria-hidden="true"> <span id="all_bange" class="badge"></span></i></a></li>
+                <li><a href="#"><i class="fa fa-level-down" aria-hidden="true"> <span id="incoming_bange" class="badge"></span></i></a></li>
+                <li><a href="#"><i class="fa fa-level-up" aria-hidden="true"> <span id="outgoing_bange" class="badge"></span></i></a></li>
+                <li><a href="#"><i class="fa fa-exclamation" aria-hidden="true"><span id="unread_bange" class="badge" ></span></i></a></li>
+                <li><a href="#"><i class="fa fa-times-circle" aria-hidden="true"> <span id="missed_bange" class="badge"></span></i></a></li>
                 </ul>
            </div>
     </div>
 </div>
 
+<table class="table " style="margin-top: 58px;" id="result">
 
+<table class="table" style="margin-top: 48px;">
 
-<bsh>
-import android.app.Service;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.Contacts.People;
-import android.provider.Contacts.Phones;
-import android.database.Cursor;
-
-import org.json.*;
-import java.util.ArrayList;
-import java.util.*;
-
-arr = new ArrayList<Integer>();
-total = new JSONObject();
-temp = new JSONObject();
-
-service = (Service) server.props.get("serviceContext");
-
-send = parameters.get("send");
-text = parameters.get("date");
-
-</bsh>
-
-<table class="table " style="margin-top: 48px;" >
-<tr class="first"><th class="numb">#</th><th class="call_name">Имя</th><th class="call_phone">Номер</th></tr>
-
-<bsh>
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-
-service = server.props.get("serviceContext");
-
-String phoneNumber = null;
-
-//Связываемся с контактными данными и берем с них значения id контакта, имени контакта и его номера:
-Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
-String _ID = ContactsContract.Contacts._ID;
-String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
-String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
-Uri PhoneCONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-String Phone_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
-String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
-
-
-StringBuffer output = new StringBuffer();
-contentResolver = service.getContentResolver();
-Cursor cursor = contentResolver.query(CONTENT_URI, null,null, null, ContactsContract.Contacts.SORT_KEY_PRIMARY + " ASC");
-
- //Запускаем цикл обработчик для каждого контакта:
- if (cursor.getCount() > 0) {
-     //Если значение имени и номера контакта больше 0 (то есть они существуют) выбираем
-     //их значения в приложение привязываем с соответствующие поля "Имя" и "Номер":
-     while (cursor.moveToNext()) {
-         position = cursor.getPosition();
-         String contact_id = cursor.getString(cursor.getColumnIndex( _ID ));
-         String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
-         int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
-         //Получаем имя:
-
-         if (hasPhoneNumber > 0) {
-
-             Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null,Phone_CONTACT_ID + " = ?", new String[] { contact_id }, null);
-             //и соответствующий ему номер:
-             if(phoneCursor!=null){
-
-
-                 while (phoneCursor.moveToNext()) {
-
-                 try {
-
-                     phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-                } catch (exception) {
-                     print(phoneNumber);
-                     phoneNumber="nnn";
-                }
-
-                 }
-
-
-             }else{
-                 phoneNumber = "null";
-
-             }
-
-             }
-
-             if(send!=null){
-                 temp.put("id", contact_id);
-                 temp.put("number", phoneNumber);
-                 temp.put("name", name);
-
-
-                 if(send.equals("all")){
-						arr.add(temp);
-					}
-
-		}else{
-
-
-         print("<tr class='click' data-toggle='modal' data-target='#myModal' ><td class='numb'>" + ++position + "&nbsp;<i class='fa fa-address-book' aria-hidden='true'></i></td><td class='call_name' >"+name+"</td><td class='call_phone'>"+phoneNumber+"</td></tr>");
-
-         }
-
-
-         temp = "";
-         temp = new JSONObject();
-
-
-         }
-
-     }
-
-
-
-total.put("all", cursor.getCount());
-
-if(send!=null){
-
-if(send.equals("info")){
-sand_date=total;
-}else{
-sand_date=arr;
-}
-
-request.sendResponse(sand_date.toString().getBytes(), "text/plain; charset=UTF-8 ");
-request.out.flush();
-request.out.close();
-
-}else{
-	print("</table>");
-}
-
-
-</bsh>
+    </table>
 
 <div id="myModal" class="modal fade">
 <div class="modal-dialog">
@@ -327,9 +310,6 @@ request.out.close();
 </div>
 </div>
 </div>
-
-
-
 
 
 </body>

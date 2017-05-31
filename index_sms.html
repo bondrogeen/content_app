@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   <title>call</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<link href="css/font-awesome.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script type="text/javascript">
+
+    var name;
+    var phone;
+    var text;
+    var sms;
+
+
+
+	$(document).ready(function() {
+        console.log("start");
+
+        if(sessionStorage.getItem('sms')){
+            console.log(sessionStorage.getItem('sms') + "true");
+            sms = JSON.parse(sessionStorage.getItem("sms"))
+            gen_table();
+        }else{
+            console.log("no sms");
+
+            get_data("sms.xhtml",{ send: "all" }, function(res){
+                console.log(res);
+                if(res){
+                    sms = res;
+                    var Obj = JSON.stringify(res);
+                    sessionStorage.setItem('sms', Obj);
+                    gen_table();
+                }else{
+                    return;
+                }
+
+            });
+
+        }
+
+        if(sessionStorage.getItem('sms_info')){
+            console.log(sessionStorage.getItem('sms_info') + "true");
+            sms_info = JSON.parse(sessionStorage.getItem("sms_info"))
+            $('#all_bange').text(sms_info.all);
+            $('#incoming_bange').text(sms_info.incoming);
+            $('#outgoing_bange').text(sms_info.outgoing);
+            $('#new_sms_bange').text(sms_info.new_sms);
+            $('#draft_bange').text(sms_info.draft);
+            $('#error_bange').text(sms_info.error);
+
+        }
+
+
+
+
+        $('#myModal').on('hidden.bs.modal', function (event) {
+
+             $('#message').val("");
+             $('#characterLeft').text('0');
+
+         });
+
+
+        $('#myModal').on('show.bs.modal', function (event) {
+
+
+            var target;
+            var event = window.event;
+            if (event.target) {
+                target = event.target;
+            } else if (event.srcElement) {
+                target = event.srcElement;
+                }
+            if (target) {
+                if (target.nodeType == 3) {
+                    target = target.parentNode;
+                }
+            if (target.tagName.toLowerCase() == "td") {
+                var row = target.parentNode;
+                var td;
+                var str = "";
+                for (var j = 0; (td = row.getElementsByTagName("td").item(j)); j++) {
+                    str += td.innerHTML + "\n";
+                    }
+                //alert(str);
+                }
+
+                name = row.getElementsByTagName("td").item(1).innerHTML;
+                id = row.getElementsByTagName("td").item(0).innerHTML;
+                id = id.split("&nbsp;");
+                id = id[0];
+                id = id - 1;
+                phone = sms[id].number;
+                console.log( sms[id].number );
+                $('#name').text(sms[id].name + "   " + sms[id].number);
+                //console.log( name + ":" + id);
+            }
+        });
+
+
+
+        $('#characterLeft').text('0');
+        $('#message').keyup(function () {
+
+            var len = $(this).val().length;
+            var ch = len;
+            if(len>=1){
+                $('#characterLeft').css( "color", "black" );
+            }
+            $('#characterLeft').text(ch);
+
+            });
+
+
+	});
+
+
+    function post(val){
+
+        console.log(val);
+        if(val=="call"){
+            $('#btn_call').text("Соединение...");
+        }else if(val=="endсall"){
+            $('#btn_call').text("Позвонить");
+            $('#message').val("");
+            $('#characterLeft').text('0');
+        }else if(val=="sms"){
+            text = $('#message').val();
+            if(text.length==0){
+                console.log(text.length);
+                $('#icon').removeClass('fa-spin');
+                $('#characterLeft').css( "color", "red" );
+                $('#characterLeft').text('Введите текст сообщения');
+                return;
+            }else{
+                $('#icon').addClass('fa-spin');
+            }
+
+
+
+        }
+        $.post( "set.xhtml", { send: val, number: phone,text: text }).done(function( data ) {
+            //console.log(JSON.parse(data));
+            try {
+                data = JSON.parse(data);
+                if(data.call=="true"){
+                    $('#btn_call').text("Звонок");
+                }else if(data.call=="false"){
+                    $('#btn_call').text("Ошибка");
+                }
+
+                if(data.sms=="true"){
+                    $('#icon').removeClass('fa-spin');
+                    $('#characterLeft').text("Сообщение отправлено...");
+                    $('#message').val("");
+
+                }else if(data.sms=="false"){
+                    $('#btnSubmit').text("Ошибка");
+                }
+
+
+            } catch (exception) {
+                data = null;
+            }
+
+
+
+        });
+    }
+
+
+    function gen_table(){
+            var tbl = "<table >";
+            tbl += "<tr class='first'><th class='numb'>#</th><th class='tel'>Имя</th><th class='msg'>Сообщение</th><th class='date'>Дата</th><th class='time'>Время</th><th></th></tr>";
+            //[{"timestamp":1496251669496,"body":"проверка","time":"20:27:49","threadId":161,"name":"Мой","read":0,"number":"+79097744733","Id":1398,"type":"incoming","date":"31-05-2017"},
+
+            for (var i=0, count=sms.length; i<count; i++) {
+
+                var num = i + 1;
+                if(sms[i].name=="null"){
+                    name= sms[i].number;
+                }else{
+                    name= sms[i].name;
+                   }
+
+                switch(sms[i].type) {
+					case "incoming":
+                        callImage = "<i class='fa fa-arrow-down' aria-hidden='true'></i>";
+							break;
+					case "outgoing":
+                        callImage = "<i class='fa fa-arrow-up' aria-hidden='true'></i>";
+							break;
+					case "draft":
+                        callImage = "<i class='fa fa-pencil' aria-hidden='true'></i>";
+					break;
+					case "error":
+                        callImage = "<i class='fa fa-ban text-danger' aria-hidden='true'></i>";
+					break;
+				}
+
+                if(sms[i].read==0){
+                    read = "<i class='fa fa-spin fa-envelope' aria-hidden='true'></i>";
+                    }else{
+                        read = "";
+                    }
+
+
+                tbl += "<tr class='click' data-toggle='modal' data-target='#myModal' >";
+                tbl += "<td class='numb'>" + num +"&nbsp;" + callImage + "</td>";
+                tbl += "<td class='tel'>" + name + "</td>";
+                tbl += "<td class='call_date'>" + sms[i].body + "</td>";
+                tbl += "<td class='call_time'>" + sms[i].date + "</td>";
+                tbl += "<td class='call_time'>" + sms[i].time + "</td>";
+                tbl += "<td class='duration'>" + read + "</td>";
+                tbl += "</tr>";
+                }
+            tbl += "</table>";
+            $("#result").html(tbl);
+
+        }
+
+
+        function get_data(html, post_data, callback ){
+            var res;
+            $.post( html, post_data, function(data) {
+                //console.log(data);
+                if(data){
+                    callback(data);
+                }else{
+                    callback(false);
+                }
+            },"json");
+        }
+
+
+
+</script>
+</head>
+
+<body style="overflow-y: scroll;">
+
+
+<div class="navbar  navbar-inverse navbar-fixed-top" >
+    <div >
+         <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+         <span class="sr-only">Открыть</span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         </button>
+        </div>
+
+
+           <div class="collapse navbar-collapse " id="menu">
+
+               <ul class="nav navbar-nav ">
+                 <li><a href="javascript:click('call.xhtml')" ><i class="fa fa-th " aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o " aria-hidden="true"></i></a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><i class="fa fa-envelope-open-o" aria-hidden="true"> <span id="all_bange" class="badge"></span></i></a></li>
+                <li><a href="#"><i class="fa fa-level-down" aria-hidden="true"> <span id="incoming_bange" class="badge"></span></i></a></li>
+                <li><a href="#"><i class="fa fa-level-up" aria-hidden="true"> <span id="outgoing_bange" class="badge"></span></i></a></li>
+                <li><a href="#"><i class="fa fa-envelope-o" aria-hidden="true"><span id="new_sms_bange" class="badge" ></span></i></a></li>
+                <li><a href="#"><i class="fa fa-pencil" aria-hidden="true"> <span id="draft_bange" class="badge"></span></i></a></li>
+                <li><a href="#"><i class="fa fa-ban" aria-hidden="true"> <span id="error_bange" class="badge"></span></i></a></li>
+                </ul>
+           </div>
+    </div>
+</div>
+
+<table class="table " style="margin-top: 58px;" id="result">
+
+<table class="table" style="margin-top: 48px;">
+
+    </table>
+
+<div id="myModal" class="modal fade">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header" ><button class="close" type="button" data-dismiss="modal"><span class="glyphicon glyphicon-remove" style="color:#ff0000;"></span></button>
+<h4 class="modal-title" id="name">Имя</h4></div>
+<div class="modal-body">
+<label id="messageLabel" for="message">Сообщение </label>
+<textarea class="form-control input-sm " type="textarea" id="message" style="font-size: 18px;" placeholder="Текст сообщения" maxlength="140" rows="5"></textarea>
+<span class="help-block"><p id="characterLeft" style="text-indent: 1em;" ></p></span>
+</div>
+<div class="modal-footer">
+<div class="btn_line">
+<button onclick="post('sms')"  id="btnSubmit" class="btn_sms"name="btnSubmit" type="button" > <i id="icon"class="fa fa-envelope" aria-hidden="true"></i></button>
+<button id="btn_call" onclick="post('call')"  class="green" type="button" >Позвонить</button>
+<button onclick="post('endсall')" type="button"  class="red" >Отбой</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</body>
+</html>

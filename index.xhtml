@@ -28,16 +28,24 @@ serverPut("pawVersion", pawVersion);
 	var info = false;
 
 
+
+    //var serialObj = JSON.stringify(res);
+    sessionStorage.setItem('key', 'value');
+
+    console.log(sessionStorage.getItem('key'));
+
+
 	$(document).ready(function() {
         $("#contentDiv").css("height", ($(window).height() * 0.9) + "px");
         $("#contentDiv").css("overflow-y", "scroll");
+
 
         get_info();
         get_sms();
         get_call();
 
         $('iframe').on('load', function(){
-            console.log("res.info.call_missed");
+
             $('#processing-modal').modal('hide');
         });
 
@@ -59,6 +67,12 @@ serverPut("pawVersion", pawVersion);
             console.log(res.info.call_missed);
 
             if(res){
+
+                var Obj = JSON.stringify(res);
+                sessionStorage.setItem('get', Obj);
+
+
+
 
                 if(res.info.new_message>0){
                    $('#sms_bange').text(res.info.new_message);
@@ -112,7 +126,7 @@ serverPut("pawVersion", pawVersion);
     }
 
 
-    function get_sms(){
+    function get_sms (){
 
          $("#sms").tooltip('destroy');
 
@@ -120,20 +134,28 @@ serverPut("pawVersion", pawVersion);
         get_data("sms.xhtml",{ send: "info" }, function(res){
             console.log(res);
 
+            if(res){
+
+                var Obj = JSON.stringify(res);
+                sessionStorage.setItem('sms_info', Obj);
 
 
-            $("#sms").tooltip({
-                html : 'true',
-                title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br> <i class="fa fa-envelope-open-o" aria-hidden="true"></i> : '+res.all+'<br> <i class="fa fa-level-down" aria-hidden="true"></i> : ' + res.incoming+'<br><i class="fa fa-level-up" aria-hidden="true"></i> : '+ res.outgoing+'<br><i class="fa fa-envelope-o" aria-hidden="true"> : '+ res.new_sms+'<br><i class="fa fa-pencil" aria-hidden="true"></i> : '+ res.draft+'<br><i class="fa fa-ban" aria-hidden="true"></i> : '+ res.error+'</p>',
-                placement: 'bottom',
-                delay: { show: 500, hide: 2000 }
-            });
+                $("#sms").tooltip({
+                    html : 'true',
+                    title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br> <i class="fa fa-envelope-open-o" aria-hidden="true"></i> : '+res.all+'<br> <i class="fa fa-level-down" aria-hidden="true"></i> : ' + res.incoming+'<br><i class="fa fa-level-up" aria-hidden="true"></i> : '+ res.outgoing+'<br><i class="fa fa-envelope-o" aria-hidden="true"> : '+ res.new_sms+'<br><i class="fa fa-pencil" aria-hidden="true"></i> : '+ res.draft+'<br><i class="fa fa-ban" aria-hidden="true"></i> : '+ res.error+'</p>',
+                    placement: 'bottom',
+                    delay: { show: 500, hide: 2000 }
+                });
 
-            $('#sms').on('show.bs.tooltip', function () {
-                $("#wifi").tooltip('hide');
-                $("#bat").tooltip('hide');
-                $("#call").tooltip('hide');
-            })
+                $('#sms').on('show.bs.tooltip', function () {
+                    $("#wifi").tooltip('hide');
+                    $("#bat").tooltip('hide');
+                    $("#call").tooltip('hide');
+                })
+
+
+
+            }
 
         })
     }
@@ -147,20 +169,33 @@ serverPut("pawVersion", pawVersion);
             console.log(res);
 
 
+            if(res){
 
-            $("#call").tooltip({
-                trigger : 'hover',
-                html : 'true',
-                title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br> <i class="fa fa-phone" aria-hidden="true"> : '+res.all+'<br> <i class="fa fa-level-down" aria-hidden="true"></i> : ' + res.incoming+'<br><i class="fa fa-level-up" aria-hidden="true"></i> : '+ res.outgoing+'<br><i class="fa fa-phone " aria-hidden="true"  style="transform: rotate(135deg);"></i> : '+ res.unread+'<br><i class="fa fa-times-circle" aria-hidden="true"></i> : '+ res.missed+'</p>',
-                placement: 'bottom',
-                delay: { show: 500, hide: 2000 }
-            });
+                var Obj = JSON.stringify(res);
+                sessionStorage.setItem('call_info', Obj);
 
-            $('#call').on('show.bs.tooltip', function () {
-                $("#wifi").tooltip('hide');
-                $("#bat").tooltip('hide');
-                $("#sms").tooltip('hide');
-            })
+                $("#call").tooltip({
+
+                    trigger : 'hover',
+                    html : 'true',
+                    title : '<p style=\'font-size:18px;text-align: justify\' >__________ <br> <i class="fa fa-phone" aria-hidden="true"> : '+res.all+'<br> <i class="fa fa-level-down" aria-hidden="true"></i> : ' + res.incoming+'<br><i class="fa fa-level-up" aria-hidden="true"></i> : '+ res.outgoing+'<br><i class="fa fa-phone " aria-hidden="true"  style="transform: rotate(135deg);"></i> : '+ res.unread+'<br><i class="fa fa-times-circle" aria-hidden="true"></i> : '+ res.missed+'</p>',
+                    placement: 'bottom',
+                    delay: { show: 500, hide: 2000 }
+                });
+
+                $('#call').on('show.bs.tooltip', function () {
+                    $("#wifi").tooltip('hide');
+                    $("#bat").tooltip('hide');
+                    $("#sms").tooltip('hide');
+                })
+
+
+
+               }
+
+
+
+
 
         })
     }
@@ -169,16 +204,14 @@ serverPut("pawVersion", pawVersion);
 
     function get_data(html, post_data, callback ){
         var res;
-        $.post( html, post_data ).done(function( data ) {
+        $.post( html, post_data, function(data) {
             //console.log(data);
-            try {
-                res = JSON.parse(data);
-                info = res;
-                } catch (exception) {
-                    res = false;
-                    }
-            callback(res);
-        });
+            if(data){
+                callback(data);
+            }else{
+                callback(false);
+            }
+        },"json");
     }
 
 
@@ -191,9 +224,9 @@ serverPut("pawVersion", pawVersion);
 
     function click(iframe_link){
         $('#processing-modal').modal('show');
-        get_sms();
-        get_info();
-        get_call();
+        //get_sms();
+        //get_info();
+        //get_call();
         console.log(iframe_link);
         document.all['iframe'].src=iframe_link;
 
@@ -222,8 +255,8 @@ serverPut("pawVersion", pawVersion);
 
                <ul class="nav navbar-nav ">
                  <li><a href="javascript:click('dial.xhtml')" ><i class="fa fa-address-book fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('call.xhtml')" id="call" ><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('sms.xhtml')" id="sms"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"> <span id="sms_bange" class="badge"></span></i></a></li>
+                 <li><a href="javascript:click('index_call.html')" id="call" ><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('index_sms.html')" id="sms"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"> <span id="sms_bange" class="badge"></span></i></a></li>
                  <li><a href="javascript:click('volumes.xhtml')"><i class="fa fa-music fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('info.xhtml')"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('console.xhtml')"><i class="fa fa-linux fa-2x" aria-hidden="true"></i></a></li>
@@ -251,13 +284,13 @@ serverPut("pawVersion", pawVersion);
 
 
 
-<div class="modal modal-static fade" id="processing-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal modal-static fade" id="processing-modal" data-target="#menu" aria-hidden="true">
+    <div class="modal-dialog" style="width: 120px;">
         <div class="modal-content">
             <div class="modal-body">
                 <div class="text-center">
-                    <img src="http://www.travislayne.com/images/loading.gif" class="icon" />
-                    <h4>Processing... <button type="button" class="close" style="float: none;" data-dismiss="modal" aria-hidden="true">×</button></h4>
+                    <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
                 </div>
             </div>
         </div>
