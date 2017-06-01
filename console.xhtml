@@ -5,24 +5,36 @@
 
 <title>BeanShell Console</title>
 
-<!--
-<link href="css/jquery-linedtextarea.css" type="text/css" rel="stylesheet" />
--->
-
 <style type="text/css">
       .CodeMirror-line-numbers {
         width: 2.2em;
         color: #aaa;
         background-color: #eee;
         text-align: right;
-        padding-right: .3em;
+
         font-size: 10pt;
         font-family: monospace;
-        padding-top: .4em;
+
       }
 	  .CodeMirror-wrapping {
 		background: white;
 	  }
+      .head {
+      background: #222;
+      width: auto;
+      height: 48px;
+      color: aliceblue;
+          margin-right: 17px;
+
+
+
+
+
+      }
+
+
+
+
     </style>
 
 <!-- Handle tab key in textarea -->
@@ -66,36 +78,28 @@
 </script>
 
 </head>
-<body>
-<h3>BeanShell Console</h3>
-<pre>
-<bsh>
-output = "OS: " + System.getProperty("os.name") +
-		                   " (" + System.getProperty("os.version") + "/" +
-				   System.getProperty("os.arch") + ")";
-$$.print(output);
-</bsh>
-BeanShell Version: <bsh>printBanner();</bsh></pre>
+<body style="margin:0px;">
+
+
+<div class="head" >
+       <h2 style="padding: 10px;">BeanShell Console</h2>
+</div>
 
 <bsh>code = parameters.get("code");</bsh>
-
-<textarea id='code' rows='15' style='width: 80%; font-size: 12px;'>
-// Enter code here...
+<p></p>
+<textarea id='code' rows='15' style='margin-left:20px; width: 80%; font-size: 12px;'>
 
 </textarea>
 
-<br><button onClick="execute();">Execute</button>&nbsp;<img id="loader" src="res/image/loader.gif" style="display: none;" width="16">
-
+<br><button style="margin-left:20px;" onClick="execute();">Execute</button>&nbsp;<img id="loader" src="res/image/loader.gif" style="display: none;" width="16">
 
 <br>
 
-<h3>Output:</h3>
-<textarea id="output" rows="15" style="background: black; color:white; width: 80%; border: 2px solid white;">
+<h3 style='margin-left:20px;' >Output:</h3>
+<textarea id="output" rows="15" style="margin-left:20px; background: black; color:white; width: 80%; border: 2px solid white;">
+
 </textarea>
+<textarea id="code2" style="margin-left:20px; display: none;"></textarea>
 
-<!-- Hidden text area to which the code is copied before submission -->
-<textarea id="code2" style="display: none;"></textarea>
-
-</body>
 </body>
 </html>

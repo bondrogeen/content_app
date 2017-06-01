@@ -1,0 +1,67 @@
+ <html>
+<body>
+<bsh>
+
+import org.json.*;
+import java.util.ArrayList;
+import java.util.*;
+import android.net.Uri;
+import android.provider.MediaStore.Audio.Media;
+uri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+
+
+arr = new ArrayList<Integer>();
+json = new JSONObject();
+
+String[] tags = new String[] {
+Media.ALBUM_ID,
+Media.ARTIST,
+Media.ALBUM,
+Media.TITLE,
+Media.ARTIST,
+Media.ALBUM,
+Media.DATA,
+Media.TRACK
+};
+
+service = server.props.get("serviceContext");
+
+cursor = service.getContentResolver().query(uri, tags, Media.IS_MUSIC + "<>0", null, android.provider.MediaStore.Audio.Media.ARTIST + "," + android.provider.MediaStore.Audio.Media.ALBUM);
+
+idHash = new Hashtable();
+
+id = 0;
+
+if(cursor.moveToFirst()) {
+  do {
+    albumId = cursor.getString(cursor.getColumnIndexOrThrow(Media.ALBUM_ID));
+    artist = cursor.getString(cursor.getColumnIndexOrThrow(Media.ARTIST));
+    album = cursor.getString(cursor.getColumnIndexOrThrow(Media.ALBUM));
+    title = cursor.getString(cursor.getColumnIndex(Media.TITLE)).replaceAll("\"", "");
+    file = cursor.getString(cursor.getColumnIndex(Media.DATA));
+    url = Uri.encode(file);
+
+    json.put("albumId", albumId);
+    json.put("artist", artist);
+    json.put("album", album);
+    json.put("title", title);
+    json.put("file", file);
+    json.put("url", url);
+
+    arr.add(json);
+
+    json = "";
+    json = new JSONObject();
+  } while(cursor.moveToNext());
+}
+
+cursor.close();
+
+
+request.sendResponse(arr.toString().getBytes(), "text/plain; charset=UTF-8 ");
+request.out.flush();
+request.out.close();
+
+</bsh>
+</body>
+</html>
