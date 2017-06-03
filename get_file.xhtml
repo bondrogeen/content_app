@@ -21,12 +21,17 @@ if(mime.equals("application/octet-stream")) {
 	request.responseHeaders.put("Content-disposition", "attachment; filename=\"" + fileName + "\"");
 }
 
+request.responseHeaders.put("Accept-Ranges", "bytes" );
+request.responseHeaders.put("Access-Control-Allow-Origin", "*" );
+
+
 fis = new FileInputStream(f);
 
 request.sendResponse(fis, (int)f.length(), mime, 200);
+
 fis.close();
 request.out.flush();
 request.out.close();
 </bsh>
 </body>
-</hmtl>
+</html>
