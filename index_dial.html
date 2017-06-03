@@ -8,7 +8,6 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
 <script src="js/jquery.min.js"></script>
-<script src="js/jquery.maskedinput-1.2.2.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script type="text/javascript">
 
@@ -243,6 +242,22 @@ console.log(sessionStorage.getItem('dial'));
         $('#set_call').modal('show');
     }
 
+    function new_call(val){
+
+        var numb = $( "#get_nub" ).val();
+        console.log(numb);
+        console.log(val);
+
+         if(val=="endсall"||numb!=""){
+             get_data("set.xhtml", { send: val, number : numb}, function(res){
+                 console.log(res);
+                 });
+             }
+
+
+
+
+    }
 
 
 </script>
@@ -380,14 +395,14 @@ console.log(sessionStorage.getItem('dial'));
 <div class="input-group">
     <span class="input-group-addon">
     <i class="fa fa-phone" aria-hidden="true"></i></span>
-    <input id="add_number" class="form-control" placeholder="Phone" name="password" type="text" value="">
+    <input id="get_nub" class="form-control" placeholder="Phone" name="phone" type="text" value="">
 </div>
 
 </div>
 <div class="modal-footer">
 <div class="btn_line">
-<button onclick=""  class="green" type="button" >Позвонить</button>
-<button onclick="" type="button"  class="red" >Отбой</button>
+<button onclick="new_call('call')"  class="green" type="button" >Позвонить</button>
+<button onclick="new_call('endсall')" type="button"  class="red" >Отбой</button>
 </div>
 </div>
 </div>
