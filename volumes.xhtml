@@ -89,23 +89,19 @@
 
 
     function change(url) {
-        console.log(url);
-    var audio = $("audio").attr("src", "get_file.xhtml?file="+url)[0];
+        var audio = $("audio").attr("src", "get_file.xhtml?file="+url)[0];
+        $("#name_track").text(check(url));
+        audio.play();
 
-    audio.play();
-
-
-    //$( 'audio' ).audioPlayer();
-    /****************/
-    //audio.pause();
-    //audio.load();//suspends and restores all audio element
-
-    //audio[0].play(); changed based on Sprachprofi's comment below
-    //audio.oncanplaythrough = audio.play();
-    /****************/
     }
 
-
+    function check(url){
+        for (var i=0, count=music.length; i<count; i++) {
+            if(music[i].file == url){
+                return music[i].title;
+            }
+        }
+    }
 
 
 </script>
@@ -125,21 +121,12 @@
         </div>
 
            <div class="collapse navbar-collapse " id="menu">
-
-               <ul class="nav navbar-nav ">
-
-                     <li><a href="#" ><i class="fa fa-fast-backward" aria-hidden="true"></i></a></li>
-                     <li><a href="#" ><i class="fa fa-backward" aria-hidden="true"></i></a></li>
-                     <li><a href="#" ><i class="fa fa-stop" aria-hidden="true"></i></a></li>
-                     <li><a href="#" ><i class="fa fa-play" aria-hidden="true"></i></a></li>
-                     <li><a href="#" ><i class="fa fa-pause" aria-hidden="true"></i></a></li>
-                     <li><a href="#" ><i class="fa fa-forward" aria-hidden="true"></i></a></li>
-                     <li><a href="#" ><i class="fa fa-fast-forward" aria-hidden="true"></i></a></li>
-
-
+               <ul style="margin-top:15px;margin-left:25px;" class="nav navbar-nav ">
+                     <li><span style="color: #0f0;padding: 10px;" id="name_track"></span></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o " aria-hidden="true"></i></a></li>
+
+                <li><a href="#" ></i></a></li>
                 </ul>
            </div>
     </div>
@@ -154,12 +141,8 @@
   <div class="container-fluid">
    <div class="row">
     <div id="list" class="col-md-3">
-
-    <ol   id="result">
-
-    </ol>
+    <ol id="result"></ol>
     </div>
-
 
     <div class="col-md-3">
         <h2>Getting started</h2>

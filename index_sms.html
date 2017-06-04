@@ -97,6 +97,10 @@
                 id = id[0];
                 id = id - 1;
                 phone = sms[id].number;
+                if(sms[id].name=="null"){
+                    sms[id].name = "";
+                }
+                console.log( sms[id].name );
                 console.log( sms[id].number );
                 $('#name').text(sms[id].name + "   " + sms[id].number);
                 //console.log( name + ":" + id);
