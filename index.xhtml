@@ -62,10 +62,7 @@ serverPut("pawVersion", pawVersion);
         $("#wifi").tooltip('destroy');
 
         get_data("get.xhtml", { send: "info" }, function(res){
-            console.log(res.battery.level);
-            console.log(res.info.new_message);
-            console.log(res.info.call_missed);
-
+            console.log("Get - OK");
             if(res){
 
                 var Obj = JSON.stringify(res);
@@ -216,7 +213,7 @@ serverPut("pawVersion", pawVersion);
                  <li><a href="javascript:click('index_call.html')" id="call" ><i class="fa fa-phone fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('index_sms.html')" id="sms"><i class="fa fa-envelope-open fa-2x" aria-hidden="true"> <span id="sms_bange" class="badge"></span></i></a></li>
                  <li><a href="javascript:click('volumes.xhtml')"><i class="fa fa-music fa-2x" aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('info.xhtml')"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:click('index_setting.xhtml')"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></a></li>
                  <li><a href="javascript:click('console.xhtml')"><i class="fa fa-linux fa-2x" aria-hidden="true"></i></a></li>
                 </ul>
 

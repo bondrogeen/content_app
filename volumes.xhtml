@@ -9,17 +9,115 @@
 	<link rel="stylesheet" href="audio_pleer/pleer.css" />
 	<link href="css/font-awesome.css" rel="stylesheet">
 	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/jquery-ui.css" rel="stylesheet">
+	<link href="css/vol.css" rel="stylesheet">
 
 	<script src="js/jquery.min.js"></script>
 	<script src="audio_pleer/audioplayer.js"></script>
-
+	<script src="js/jquery-ui.min.js"></script>
 
 <script type="text/javascript">
 
     var music;
+    var get;
+
+
+
+
 
 
 	$(document).ready(function() {
+
+        if(sessionStorage.getItem('get')){
+            get = JSON.parse(sessionStorage.getItem("get"))
+            console.log(get.audio_volume.info.system_max);
+            $("#System").attr({
+                "max" : get.audio_volume.info.system_max,
+                "min" : 0,
+                "value" : get.audio_volume.system
+            });
+            $("#System_i").text(get.audio_volume.system);
+
+            $("#Call").attr({
+                "max" : get.audio_volume.info.voice_call_max,
+                "min" : 0,
+                "value" : get.audio_volume.voice_call
+            });
+            $("#Call_i").text(get.audio_volume.voice_call);
+
+            $("#Media").attr({
+                "max" : get.audio_volume.info.music_max,
+                "min" : 0,
+                "value" : get.audio_volume.music
+            });
+            $("#Media_i").text(get.audio_volume.music);
+
+            $("#Ringen").attr({
+                "max" : get.audio_volume.info.ring_max,
+                "min" : 0,
+                "value" : get.audio_volume.ring
+            });
+            $("#Ringen_i").text(get.audio_volume.ring);
+
+            $("#Notification").attr({
+                "max" : get.audio_volume.info.notification_max,
+                "min" : 0,
+                "value" : get.audio_volume.notification
+            });
+            $("#Notification_i").text(get.audio_volume.notification);
+
+            $("#Alarm").attr({
+                "max" : get.audio_volume.info.alarm_max,
+                "min" : 0,
+                "value" : get.audio_volume.alarm
+            });
+            $("#Alarm_i").text(get.audio_volume.alarm);
+
+            //STREAM_NOTIFICATION, STREAM_MUSIC ,STREAM_ALARM, STREAM_RING, STREAM_SYSTEM, STREAM_VOICE_CALL)
+
+            $(window).unload(function(){
+                alert("Пока, пользователь!");
+                console.log("close");
+                get_data("get.xhtml", { send: "info" }, function(res){
+                    console.log("Get - OK");
+                    if(res){
+                        var Obj = JSON.stringify(res);
+                        sessionStorage.setItem('get', res);
+                    }
+                });
+
+
+            });
+
+            $('input').change(function(event){
+
+
+                stream = {
+                    "System": "STREAM_SYSTEM",
+                    "Call": "STREAM_VOICE_CALL",
+                    "Media": "STREAM_MUSIC",
+                    "Ringen": "STREAM_RING",
+                    "Notification": "STREAM_NOTIFICATION",
+                    "Alarm": "STREAM_ALARM"
+                         }
+
+
+                console.log($(this).attr('id'));
+                var value = $(this).val();
+                var id = $(this).attr('id');
+
+                console.log(stream[id]);
+                 get_data("set.xhtml",{ send: "volume",mode: stream[id] ,number: value }, function(res){
+                     if(res.volume == "true"){
+                         get.audio_volume.system  = value;
+                        }
+                     });
+                });
+
+
+    }
+
+
 
         $( 'audio' ).audioPlayer();
 
@@ -126,7 +224,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
 
-                <li><a href="#" ></i></a></li>
+                <li><a href="#" ></a></li>
                 </ul>
            </div>
     </div>
@@ -144,9 +242,80 @@
     <ol id="result"></ol>
     </div>
 
-    <div class="col-md-3">
-        <h2>Getting started</h2>
-        <p>.............</p>
+    <div class="col-md-9">
+
+ <div class="container">
+      <h2>Volume phone</h2>
+      <hr/>
+
+      <div class="row">
+        <div class="col-xs-6">
+
+          <div class="range">
+            <input id="System" type="range" name="range" min="0"  onchange="System_i.value=value">
+            <output id="System_i"></output>
+          </div>
+                System (The audio stream for system sounds)
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-6">
+
+          <div class="range range-success">
+            <input id="Call" type="range" name="range" min="0"  onchange="Call_i.value=value">
+            <output id="Call_i"></output>
+          </div>
+          Call (The audio stream for phone calls)
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-6">
+
+          <div class="range range-warning">
+            <input id="Media" type="range" name="range" min="0"  onchange="Media_i.value=value">
+            <output id="Media_i"></output>
+          </div>
+            Media (The audio stream for music playback)
+        </div>
+    </div>
+          <div class="row">
+        <div class="col-xs-6">
+
+          <div class="range range-primary">
+            <input id="Ringen" type="range" name="range" min="0" onchange="Ringen_i.value=value">
+            <output id="Ringen_i"></output>
+            </div>
+            Ringen (The audio stream for the phone ring)
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-6">
+
+          <div class="range range-info">
+            <input id="Notification" type="range" name="range" min="0"  onchange="Notification_i.value=value">
+            <output id="Notification_i"></output>
+          </div>
+          Notification (The audio stream for notifications)
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-6">
+
+          <div class="range range-danger">
+            <input  id="Alarm" type="range" name="range" min="0"  onchange="Alarm_i.value=value">
+            <output id="Alarm_i"></output>
+          </div>
+          Alarm (The audio stream for alarms)
+        </div>
+    </div>
+
+</div>
+
+
     </div>
 
  </div>

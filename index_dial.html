@@ -7,6 +7,7 @@
 <link href="css/font-awesome.css" rel="stylesheet">
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
+<link href="css/jquery-ui.css" rel="stylesheet">
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script type="text/javascript">
@@ -97,7 +98,7 @@ console.log(sessionStorage.getItem('dial'));
                 id = id[0];
                 id = id - 1;
                 phone = dial[id].number;
-                console.log( dial[id].number );
+
                 $('#name').text(dial[id].name + "   " + dial[id].number);
                 //console.log( name + ":" + id);
             }

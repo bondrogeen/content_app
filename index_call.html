@@ -105,7 +105,11 @@
                 id = id[0];
                 id = id - 1;
                 phone = call[id].number;
-                console.log( call[id].number );
+                //console.log( call[id].name );
+
+                if(call[id].name=="null"){
+                   call[id].name="";
+                   }
                 $('#name').text(call[id].name + "   " + call[id].number);
                 //console.log( name + ":" + id);
             }
@@ -252,6 +256,12 @@
             },"json");
         }
 
+        function set_call(){
+
+        $('#set_call').modal('show');
+
+        }
+
 
 
 </script>
@@ -276,8 +286,8 @@
            <div class="collapse navbar-collapse " id="menu">
 
                <ul class="nav navbar-nav ">
-                 <li><a href="javascript:click('call.xhtml')" ><i class="fa fa-th " aria-hidden="true"></i></a></li>
-                 <li><a href="javascript:click('sms.xhtml')" ><i class="fa fa-trash-o " aria-hidden="true"></i></a></li>
+                 <li><a href="javascript:set_call()" ><i class="fa fa-th " aria-hidden="true"></i></a></li>
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                 <li><a href="#"><i class="fa fa-phone all" aria-hidden="true"> <span id="all_bange" class="badge"></span></i></a></li>
@@ -331,6 +341,30 @@
     </div>
 </div>
 
+
+<div id="set_call" class="modal fade">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header" ><button class="close" type="button" data-dismiss="modal"><span class="glyphicon glyphicon-remove" style="color:#ff0000;"></span></button>
+<h4 class="modal-title" id="name">Введите номер</h4></div>
+<div class="modal-body">
+
+<div class="input-group">
+    <span class="input-group-addon">
+    <i class="fa fa-phone" aria-hidden="true"></i></span>
+    <input id="get_nub" class="form-control" placeholder="Phone" name="phone" type="text" value="">
+</div>
+
+</div>
+<div class="modal-footer">
+<div class="btn_line">
+<button onclick="new_call('call')"  class="green" type="button" >Позвонить</button>
+<button onclick="new_call('endсall')" type="button"  class="red" >Отбой</button>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 </body>
 </html>

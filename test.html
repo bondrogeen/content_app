@@ -1,73 +1,46 @@
-
- <html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>infosetting</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Slider - Custom handle</title>
+  <link href="css/jquery-ui.css" rel="stylesheet">
 
-<link href="css/style.css" rel="stylesheet">
-<link href="css/bootstrap.css" rel="stylesheet">
-<link href="css/font-awesome.css" rel="stylesheet">
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/jquery-ui.js"></script>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="js/bootstrap.js"></script>
-
-<style type="text/css">
-
-
+  <style>
+  #custom-handle {
+    width: 3em;
+    height: 1.6em;
+    top: 50%;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+  }
   </style>
-
-<script type="text/javascript">
-
-
-var data = JSON.parse(localStorage.getItem("dial"))
-
-
-
-	$(document).ready(function() {
-
-
-        console.log(data);
-
-         var tbl = "<table border=1>";
-
-         tbl += "<tr class='first'><th class='numb'>#</th><th class='call_name'>Имя</th><th class='call_phone'>Номер</th></tr>";
-         for (var i=0, count=data.length; i<count; i++) {
-            tbl += "<tr>";
-
-            tbl += "<td>" + i + "</td>";
-            tbl += "<td>" + data[i].name + "</td>";
-            tbl += "<td>" + data[i].number + "</td>";
-            tbl += "</tr>";
-         }
-         tbl += "</table>";
-         $("#result").html(tbl);
-
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  <script>
+  $( function() {
+    var handle = $( "#custom-handle" );
+    $( "#slider" ).slider({
+      create: function() {
+        handle.text( $( this ).slider( "value" ) );
+      },
+      slide: function( event, ui ) {
+        handle.text( ui.value );
+      }
     });
-
-
-
-    </script>
-
-
-
-
+  } );
+  </script>
 </head>
 <body>
 
-<table class="table " style="margin-top: 58px;" id="result">
+<div id="slider">
+  <div id="custom-handle" class="ui-slider-handle"></div>
+</div>
 
 
-
-</table>
-
-
-
-
-
-  </body>
+</body>
 </html>
-
 
 
 
