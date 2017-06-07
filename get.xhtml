@@ -101,41 +101,6 @@ battery.put("temperature", temperature);
 
 jsonVar.put("battery", battery);
 
-
-
-// Get memory info
-
-activityManager = (ActivityManager) service.getSystemService(Context.ACTIVITY_SERVICE);
-memInfo = new ActivityManager.MemoryInfo();
-activityManager.getMemoryInfo(memInfo);
-free = memInfo.availMem / 1024 /1024;
-total = memInfo.totalMem / 1024 /1024;
-
-import android.os.StatFs;
-import android.os.Environment;
-
-getStorageInfo(type) {
-  // Default type is "sdcard"
-  stat = new StatFs(type.equals("int") ? Environment.getDataDirectory().getPath() : Environment.getExternalStorageDirectory().getPath());
-
-  megsTotal = (long)stat.getBlockSize() *(long)stat.getBlockCount() / 1024D / 1024D;
-  megsAvailable = (long)stat.getBlockSize() *(long)stat.getAvailableBlocks() / 1024D /   1024D;
-
-  String[] vals = { String.format("%.2f", new Object[] { megsTotal }),            String.format("%.2f", new Object[] { megsAvailable }) };
-  return vals;
-}
-
-memory.put("int_total", getStorageInfo("int")[0]);
-memory.put("int_free", getStorageInfo("int")[1]);
-memory.put("sdcard_total", getStorageInfo("sdcard")[0]);
-memory.put("sdcard_free", getStorageInfo("sdcard")[1]);
-memory.put("ram_free", free);
-memory.put("ram_total", total);
-
-jsonVar.put("memory", memory);
-
-
-
 // Get cpu info
 
 
@@ -327,7 +292,50 @@ audiovol.put("voice_call", STREAM_VOICE_CALL);
 
 jsonVar.put("audio_volume", audiovol);
 
-jsonVar.put("test", "test");
+
+// Get memory info
+
+activityManager = (ActivityManager) service.getSystemService(Context.ACTIVITY_SERVICE);
+memInfo = new ActivityManager.MemoryInfo();
+activityManager.getMemoryInfo(memInfo);
+free = memInfo.availMem / 1024 /1024;
+
+int SDK_i = new Integer(SDK);
+
+if (SDK_i>=16){
+total = memInfo.totalMem / 1024 /1024;
+}
+
+
+import android.os.StatFs;
+import android.os.Environment;
+
+getStorageInfo(type) {
+  // Default type is "sdcard"
+  stat = new StatFs(type.equals("int") ? Environment.getDataDirectory().getPath() : Environment.getExternalStorageDirectory().getPath());
+
+  megsTotal = (long)stat.getBlockSize() *(long)stat.getBlockCount() / 1024D / 1024D;
+  megsAvailable = (long)stat.getBlockSize() *(long)stat.getAvailableBlocks() / 1024D /   1024D;
+
+  String[] vals = { String.format("%.2f", new Object[] { megsTotal }),            String.format("%.2f", new Object[] { megsAvailable }) };
+  return vals;
+}
+
+memory.put("int_total", getStorageInfo("int")[0]);
+memory.put("int_free", getStorageInfo("int")[1]);
+memory.put("sdcard_total", getStorageInfo("sdcard")[0]);
+memory.put("sdcard_free", getStorageInfo("sdcard")[1]);
+memory.put("ram_free", free);
+memory.put("ram_total", total);
+
+jsonVar.put("memory", memory);
+
+
+
+
+
+
+
 
 request.sendResponse(jsonVar.toString().getBytes(), "text/plain; charset=UTF-8");
 request.out.flush();
