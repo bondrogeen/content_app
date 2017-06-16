@@ -4,6 +4,7 @@
 import org.json.*;
 import de.fun2code.android.pawserver.AndroidInterface;
 
+import java.lang.*;
 import java.util.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -542,25 +543,27 @@ switch (send) {
 
 				if (text != null) {
 
-				execRootShell(String[] commands , boolean silent) {
-					shellCmd = "su -c sh";
-					sh = Runtime.getRuntime().exec(shellCmd);
-					os = sh.getOutputStream();
-					for(cmd : commands) {
-						os.write((cmd + "\n").getBytes());
-						}
-						os.write(("exit\n").getBytes());
-						os.flush();
-						sh.waitFor();
-				}
-					try {
-						execRootShell(new String[]{"am broadcast -a net.dinglisch.android.tasker.ACTION_TASK -e task_name "+ text}, false);
-						jsonVar.put("task", "true");
+                    import de.fun2code.android.pawserver.TaskerIntent;
 
-					} catch (e) {
-							jsonVar.put("task", "false");
-							jsonVar.put("error", e);
-						}
+                    service = server.props.get("serviceContext");
+                    if ( TaskerIntent.testStatus(service).equals( TaskerIntent.Status.OK ) ) {
+                        TaskerIntent i = new TaskerIntent( text );
+                        if (value != null){
+                            s = value.split(",,");
+                             for (int j = 0; j < s.length; j++) {
+                                i.addParameter(s[j]);
+
+                                }
+                        }
+
+                        service.sendBroadcast(i);
+                        jsonVar.put("task", "true");
+
+                        }else{
+                        jsonVar.put("task", "false");
+                        jsonVar.put("error", TaskerIntent.testStatus(service));
+
+                    }
 				}else{
 					jsonVar.put("task", "no_text");
 				}
