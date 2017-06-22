@@ -24,11 +24,14 @@ text = parameters.get("text");
 texthead = parameters.get("texthead");
 mode = parameters.get("mode");
 number = parameters.get("number");
-textcolour = parameters.get("textcolour");
+textcolor = parameters.get("textcolor");
 value = parameters.get("value");
-colour = parameters.get("colour");
+color = parameters.get("color");
 font = parameters.get("font");
 date = parameters.get("date");
+
+orientation = parameters.get("orientation");
+textsize = parameters.get("textsize");
 
 pawHome = server.props.get("serviceContext").pawHome;
 file = new File(pawHome +"/html/setting.json");
@@ -112,7 +115,6 @@ switch (send) {
 
       		break;
 
-
 			case "rec":
 				import java.util.*;
 				import java.text.SimpleDateFormat;
@@ -144,7 +146,6 @@ switch (send) {
 
 			break;
 
-
 			case "lcd_on":
 			    import android.content.Context;
 				import android.os.PowerManager;
@@ -156,7 +157,6 @@ switch (send) {
 				wakeLock.acquire();
 				jsonVar.put("lcd_on", "true");
 			break;
-
 
             case "new_contact":
                 if (number != null&&text != null) {
@@ -199,9 +199,6 @@ switch (send) {
                 }
 
             break;
-
-
-
 
 			case "gong":
 				import java.io.File;
@@ -306,7 +303,6 @@ switch (send) {
 
 
 			case "screen_off_time":
-
 				import android.provider.Settings;
 				service = server.props.get("serviceContext");
 
@@ -372,14 +368,11 @@ switch (send) {
 					try {
 						execRootShell(new String[]{text}, false);
 						jsonVar.put("exec", "true");
-
 						} catch (e) {
 							jsonVar.put("exec", "false");
 							jsonVar.put("error", e);
 							}
-
 				} else {jsonVar.put("exec", "false");}
-
 			break;
 
             case "scan":
@@ -540,11 +533,8 @@ switch (send) {
 				break;
 
 			case "task":
-
 				if (text != null) {
-
                     import de.fun2code.android.pawserver.TaskerIntent;
-
                     service = server.props.get("serviceContext");
                     if ( TaskerIntent.testStatus(service).equals( TaskerIntent.Status.OK ) ) {
                         TaskerIntent i = new TaskerIntent( text );
@@ -552,22 +542,18 @@ switch (send) {
                             s = value.split(",,");
                              for (int j = 0; j < s.length; j++) {
                                 i.addParameter(s[j]);
-
                                 }
                         }
-
                         service.sendBroadcast(i);
                         jsonVar.put("task", "true");
 
                         }else{
                         jsonVar.put("task", "false");
                         jsonVar.put("error", TaskerIntent.testStatus(service));
-
                     }
 				}else{
 					jsonVar.put("task", "no_text");
 				}
-
 				break;
 
             case "app_start":
@@ -589,6 +575,27 @@ switch (send) {
 				else{jsonVar.put("app_start", "false");}
 				break;
 
+            case "informer":
+                import de.fun2code.android.pawserver.*;
+                import android.content.Intent;
+                service = server.props.get("serviceContext");
+                i = new Intent(service, Informer.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                if (text!=null){i.putExtra("text", text);}
+                if (textsize!=null){i.putExtra("textsize", textsize);}
+                if (textcolor!=null){i.putExtra("textcolor", "#"+textcolor);}
+                if (color!=null){i.putExtra("color", "#"+color);}
+                if (orientation!=null){i.putExtra("orientation", orientation);}
+                if (font!=null){i.putExtra("font", font);}
+
+                service.startActivity(i);
+				jsonVar.put("informer", "true");
+
+
+				break;
+
+
             default:
 
         }
@@ -598,11 +605,13 @@ jsonVar.put("send", send);
 jsonVar.put("texthead", texthead);
 jsonVar.put("mode", mode);
 jsonVar.put("number", number);
-jsonVar.put("textcolour", textcolour);
+jsonVar.put("textcolor", textcolor);
 jsonVar.put("value", value);
-jsonVar.put("colour", colour);
+jsonVar.put("color", color);
 jsonVar.put("font", font);
 jsonVar.put("date", date);
+jsonVar.put("orientation", orientation);
+jsonVar.put("textsize", textsize);
 
 
 request.sendResponse(jsonVar.toString().getBytes(), "text/plain; charset=UTF-8");
