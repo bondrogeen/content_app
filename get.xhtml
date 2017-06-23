@@ -39,47 +39,47 @@ source(server.props.get("serviceContext").pawHome + "/html/app/bsh/constantsTool
 preferences = service.getSharedPreferences("PawServer", 0);
 toolbarSettings = preferences.getInt("toolbarHide", 0);
 
-
 // Sensors
-
+sensorListener = AndroidInterface.getSensorListener();
 sensorService = service.getSystemService(Context.SENSOR_SERVICE);
 sensors = sensorService.getSensorList(Sensor.TYPE_ALL);
 for(sensor : sensors) {
-    sensorinfo.put(sensor.getName().toLowerCase(), sensor);
-}
-sens.put("info", sensorinfo);
-
-sensorListener = AndroidInterface.getSensorListener();
-sens.put("gyro_x", sensorListener.getGyroX());
-sens.put("gyro_y", sensorListener.getGyroY());
-sens.put("gyro_z", sensorListener.getGyroZ());
-sens.put("bearing", sensorListener.getOrientBearing());
-sens.put("proximity", sensorListener.getProximity());
-sens.put("light", sensorListener.getBrightness());
-
-if (sensorListener.getRelativeHumidity()!=0){
-sens.put("humidity", sensorListener.getRelativeHumidity());
-}
-
-if (sensorListener.getAmbientTemperature()!=0){
-sens.put("temperature", sensorListener.getAmbientTemperature());
-}
-
-if (sensorListener.getPressure()!=0){
-sens.put("pressure", sensorListener.getPressure());
-}
-if (sensorListener.getX()!=0){
+    switch (sensor.getType()) {
+          case 1:
 sens.put("accelerometer_x", sensorListener.getX());
 sens.put("accelerometer_y", sensorListener.getY());
 sens.put("accelerometer_z", sensorListener.getZ());
 sens.put("accelerometer_force", sensorListener.getForce());
+          break;
+     case 3:
+sens.put("bearing", sensorListener.getOrientBearing());
+          break;
+     case 5:
+sens.put("light", sensorListener.getBrightness());
+          break;
+     case 8:
+sens.put("proximity", sensorListener.getProximity());
+          break;
+         case 6:
+sens.put("pressure", sensorListener.getPressure());
+          break;
+         case 4:
+sens.put("gyro_x", sensorListener.getGyroX());
+sens.put("gyro_y", sensorListener.getGyroY());
+sens.put("gyro_z", sensorListener.getGyroZ());
+          break;
+
+         case 13:
+//sens.put("temperature", sensorListener.getAmbientTemperature());
+    print(sensorListener.getAmbientTemperature());
+          break;
+         case 12:
+sens.put("humidity", sensorListener.getRelativeHumidity());
+          break;
+     }
+
 }
-
-
 jsonVar.put("sensors", sens);
-
-
-
 
 // Get BATTERY info
 intent = IntentUtil.getIntentResultFromBroadcast(service, Intent.ACTION_BATTERY_CHANGED);
